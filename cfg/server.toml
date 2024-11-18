@@ -1,0 +1,7 @@
+[database]
+database_type = mongo
+database_host = localhost
+database_port = 27017
+
+[api]
+listening_port = 8081
