@@ -6,10 +6,17 @@ import (
 	"github.com/spf13/viper"
 )
 
+type DatabaseAuth struct {
+	Username string
+	Password string
+}
 type DatabaseConfig struct {
-	Type string
-	Host string
-	Port string
+	Type       string
+	Host       string
+	Port       string
+	Name       string
+	TlsSupport bool
+	Auth       DatabaseAuth
 }
 
 type ApiConfig struct {
@@ -33,12 +40,18 @@ func SetServerConfig() ServerConfig {
 
 	return ServerConfig{
 		Instance: ApiConfig{
-			Port: viper.GetString("config.listening_port"),
+			Port: viper.GetString("api.listening_port"),
 		},
 		Database: DatabaseConfig{
-			Type: viper.GetString("config.database_type"),
-			Host: viper.GetString("config.database_host"),
-			Port: viper.GetString("config.database_port"),
+			Type:       viper.GetString("database.type"),
+			Host:       viper.GetString("database.host"),
+			Port:       viper.GetString("database.port"),
+			Name:       viper.GetString("database.name"),
+			TlsSupport: false,
+			Auth: DatabaseAuth{
+				Username: viper.GetString("database.username"),
+				Password: viper.GetString("database.password"),
+			},
 		},
 	}
 }

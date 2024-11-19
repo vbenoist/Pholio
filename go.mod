@@ -1,4 +1,4 @@
-module github.com/jackidu14/Pholio
+module github.com/jackidu14/pholio
 
 go 1.23.2
 

@@ -1,7 +1,11 @@
 [database]
-database_type = mongo
-database_host = localhost
-database_port = 27017
+type = "mongo"
+host = "127.0.0.1"
+port = "27017"
+name = "pholio"
+username = "root"
+password = "example"
+
 
 [api]
-listening_port = 8081
+listening_port = "8081"
