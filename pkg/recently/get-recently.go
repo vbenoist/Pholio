@@ -6,26 +6,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackidu14/pholio/internal/database/connector"
+	"github.com/jackidu14/pholio/models"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// Difference between Lastly / Lately is just from configured date -- TODO
-type RecentlyRecords struct {
-	Lastly []Record
-	Lately []Record
-}
-
-type Record struct {
-	NativImgSrc string
-	MidImgSrc   string
-	ThumbImgSrc string
-	Description string
-	Location    string
-	Date        string
-}
-
 func GetRecentlyContent(c *gin.Context) {
-	var records []Record
+	var records []models.Record
 
 	collection := connector.GetCollection("recently")
 	cursor, err := collection.Find(context.Background(), bson.D{{}})
