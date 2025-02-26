@@ -49,18 +49,18 @@ func GetRecentlyContent(c *gin.Context) {
 	c.JSON(200, extractedRecords)
 }
 
-func extractRecentlyRecords(records []models.Record) (models.RecentlyRecords, error) {
-	var recentlyRecords models.RecentlyRecords
+func extractRecentlyRecords(records []models.Record) (*models.RecentlyRecords, error) {
 	lastlyRecord, err := getLastlyRecord(records)
 
 	if err != nil {
-		return recentlyRecords, err
+		return nil, err
 	}
 
 	/* 2 weeks before last records */
 	dateDelimiter := lastlyRecord.Date.Time().AddDate(0, 0, -14) // 24 * 14
 
 	fmt.Printf("Date to delimit: %s\n", dateDelimiter)
+	var recentlyRecords models.RecentlyRecords
 
 	for _, rec := range records {
 		if rec.Date.Time().Before(dateDelimiter) {
@@ -72,16 +72,14 @@ func extractRecentlyRecords(records []models.Record) (models.RecentlyRecords, er
 		}
 	}
 
-	return recentlyRecords, nil
+	return &recentlyRecords, nil
 }
 
-func getLastlyRecord(records []models.Record) (models.Record, error) {
-	var result models.Record
-
+func getLastlyRecord(records []models.Record) (*models.Record, error) {
 	if len(records) == 0 {
-		return result, fmt.Errorf("getLastlyRecord: no records to walk in")
+		return nil, fmt.Errorf("getLastlyRecord: no records to walk in")
 	}
-	result = records[0]
+	result := records[0]
 
 	for key, rec := range records {
 		if key == 0 {
@@ -93,5 +91,5 @@ func getLastlyRecord(records []models.Record) (models.Record, error) {
 		}
 	}
 
-	return result, nil
+	return &result, nil
 }

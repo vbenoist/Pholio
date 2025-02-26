@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasFetched" class="container">
+  <div v-if="hasFetched && items" class="container">
     <TileGroup title="Derniers ajouts" :items="items.lastly" />
     <TileGroup title="Plus anciennement" :items="items.lately" />
   </div>
