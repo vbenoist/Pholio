@@ -1,6 +1,7 @@
 import type { Ref } from 'vue'
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import { defineStore } from 'pinia'
+import { ApiResolver } from "@/plugins/apiResolver"
 
 export type RecentlyContent = {
   lastly: Array<Item>
@@ -19,42 +20,10 @@ export type Item = {
 export const useRecentlyContentStore = defineStore('recentlyContent', () => {
   let content: RecentlyContent | null = null
   const fetched: Ref<boolean> = ref(false)
+  const apiResolver = inject('$apiResolver') as ApiResolver
 
   async function initContent() {
-    // API Call
-    // MOCK instead
-
-    content = {
-      lastly: [
-        {
-          nativImgSrc: '/src/assets/img/IMG_2813.jpg',
-          midImgSrc: '/src/assets/img/IMG_2813.jpg',
-          thumbImgSrc: '/src/assets/img/IMG_2813.jpg',
-          description: "Lac de Crouserocs au petit matin, à la fin du mois d'octobre",
-          location: 'Lac de Crouserocs - Macif des Cerces',
-          date: new Date('2024-10-30'),
-        },
-        {
-          nativImgSrc: '/src/assets/img/IMG_2813.jpg',
-          midImgSrc: '/src/assets/img/IMG_2813.jpg',
-          thumbImgSrc: '/src/assets/img/IMG_2813.jpg',
-          description: "Lac de Crouserocs au petit matin, à la fin du mois d'octobre",
-          location: 'Lac de Crouserocs - Macif des Cerces',
-          date: new Date('2024-10-30'),
-        },
-      ],
-      lately: [
-        {
-          nativImgSrc: '/src/assets/img/IMG_2813.jpg',
-          midImgSrc: '/src/assets/img/IMG_2813.jpg',
-          thumbImgSrc: '/src/assets/img/IMG_2813.jpg',
-          description: "Lac de Crouserocs au petit matin, à la fin du mois d'octobre",
-          location: 'Lac de Crouserocs - Macif des Cerces',
-          date: new Date('2024-10-30'),
-        },
-      ],
-    }
-
+    content = await apiResolver.fetchRecently()
     fetched.value = true
   }
 
