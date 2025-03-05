@@ -1,29 +1,24 @@
 <template>
-  <!-- <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header> -->
-
-  <BannerHeader />
-  <BannerMenu class="banner-menu" />
+  <header v-if="!isAdminRoute">
+      <BannerHeader />
+      <BannerMenu class="banner-menu" />
+  </header>
 
   <RouterView />
 </template>
 
 <script setup lang="ts">
-// import { RouterLink, RouterView } from 'vue-router'
-// import HelloWorld from './components/HelloWorld.vue'
-
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import BannerHeader from '@/components/Common/BannerHeader.vue'
 import BannerMenu from '@/components/Common/BannerMenu.vue'
+
+const route = useRoute()
+
+const isAdminRoute = computed(() => {
+  return route.fullPath.includes('admin')
+})
+
 </script>
 
 <style scoped>

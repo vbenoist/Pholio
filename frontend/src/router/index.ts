@@ -42,6 +42,11 @@ const router = createRouter({
       name: 'PINED',
       component: TheWelcome,
     },
+    {
+      path: '/admin/add',
+      name: 'ADMINADD',
+      component: () => import('@/views/Admin/AddImages.vue'),
+    },
   ],
 })
 
