@@ -6,6 +6,7 @@ import { createPinia } from 'pinia'
 import { OhVueIcon, addIcons } from "oh-vue-icons"
 import {
   CoFullscreen,
+  IoClose,
   IoTrashBinSharp
 } from "oh-vue-icons/icons"
 
@@ -22,7 +23,7 @@ app.use(Axios)
 app.use(ApiResolver)
 app.use(pinia)
 
-addIcons(CoFullscreen, IoTrashBinSharp)
+addIcons(CoFullscreen, IoClose, IoTrashBinSharp)
 app.component("v-icon", OhVueIcon)
 
 app.mount('#app')
