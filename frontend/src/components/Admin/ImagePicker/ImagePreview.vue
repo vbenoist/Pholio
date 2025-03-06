@@ -16,17 +16,28 @@
         </div>
       </div>
     </div>
+
+    <ImageModal
+      v-model:is-open="isModalOpen"
+      v-model:photo="selectedPhoto"
+      @close="onCloseModal"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineModel } from 'vue'
+import { defineModel, ref } from 'vue'
 import type { UploadableFile } from '@/composables/fileManager'
+import ImageModal from "@/components/Admin/ImagePicker/ImageModal.vue"
 
 const photos = defineModel<Array<UploadableFile>>()
+const isModalOpen = ref<boolean>(false)
+const selectedPhoto = ref<UploadableFile | null>(null)
 
 const displayFullsize = (photo: UploadableFile) => {
   console.log("displayFullsize", photo)
+  isModalOpen.value = true
+  selectedPhoto.value = photo
 }
 
 const removePhoto = (photo: UploadableFile) => {
@@ -35,6 +46,10 @@ const removePhoto = (photo: UploadableFile) => {
 
   if(idx === -1) return
   photos.value?.splice(idx, 1)
+}
+
+const onCloseModal = () => {
+  selectedPhoto.value = null
 }
 
 </script>
