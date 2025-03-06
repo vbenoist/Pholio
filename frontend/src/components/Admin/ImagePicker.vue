@@ -36,7 +36,7 @@
 import { useTemplateRef } from 'vue'
 import DropZone from '@/components/Admin/ImagePicker/DropZone.vue'
 import fileManager from '@/composables/fileManager'
-import type { UploadableFile } from '@/composables/fileManager'
+import type { UploadableFile } from '@/models/uploadableFile'
 
 const filesModel = defineModel<Array<UploadableFile>>()
 const photoInput = useTemplateRef('photo-drop-input')

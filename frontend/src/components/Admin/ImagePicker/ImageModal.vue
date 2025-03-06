@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { defineModel, useTemplateRef, watch } from 'vue'
-import type { UploadableFile } from '@/composables/fileManager'
+import type { UploadableFile } from '@/models/uploadableFile'
 
 const emit = defineEmits<{
   close: []

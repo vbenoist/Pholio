@@ -1,5 +1,6 @@
 import type { Ref } from 'vue'
 import { ref, toRaw } from 'vue'
+import { UploadableFile } from '@/models/uploadableFile'
 
 export default () => {
   const files: Ref<Array<UploadableFile>> = ref([])
@@ -22,20 +23,4 @@ export default () => {
   }
 
   return { addMergeFiles, convertFileListArray, files }
-}
-
-export type UploadableFileStatus = 'PENDING' | 'SENDING' | 'FAILED' | 'SENT'
-
-export class UploadableFile {
-  file: File
-  id: string
-  url: string
-  status: boolean
-
-	constructor(file: File) {
-		this.file = file
-		this.id = `${file.name}-${file.size}-${file.lastModified}-${file.type}`
-		this.url = URL.createObjectURL(file)
-		this.status = false
-	}
 }

@@ -1,20 +1,24 @@
 <template>
-  <div class="preview">
+  <div :class="['preview', `preview--${orientation}`]">
     <div
       v-for="(photo, pk) in photos"
-      :key="`photo-prev-${pk}`"
-      class="preview__container"
+      :key="`photo-prev-${orientation}-${pk}`"
+      :class="['preview__block', `preview__block--${orientation}`]"
     >
-      <img class="preview__container__img" :src="photo.url" />
-      <div class="preview__container__overlay">
-        <div
-          class="preview__container__overlay__actions"
-          @click="displayFullsize(photo)"
-        >
-          <v-icon name="co-fullscreen" scale="1.3" />
-          <v-icon name="io-trash-bin-sharp" scale="1.3" @click.stop="removePhoto(photo)" />
+      <div class="preview__container">
+        <img class="preview__container__img" :src="photo.url" />
+        <div class="preview__container__overlay">
+          <div
+            class="preview__container__overlay__actions"
+            @click="displayFullsize(photo)"
+          >
+            <v-icon name="co-fullscreen" scale="1.3" />
+            <v-icon name="io-trash-bin-sharp" scale="1.3" @click.stop="removePhoto(photo)" />
+          </div>
         </div>
       </div>
+
+      <slot name="preview-extend" :photo="photo"></slot>
     </div>
 
     <ImageModal
@@ -26,10 +30,17 @@
 </template>
 
 <script setup lang="ts">
-import { defineModel, ref } from 'vue'
-import type { UploadableFile } from '@/composables/fileManager'
+import { defineModel, defineProps, ref } from 'vue'
+import type { UploadableFile } from '@/models/uploadableFile'
 import ImageModal from "@/components/Admin/ImagePicker/ImageModal.vue"
 
+type OrientationType = 'horizontal' | 'vertical'
+
+const {
+  orientation = 'horizontal'
+} = defineProps<{
+  orientation?: OrientationType
+}>()
 const photos = defineModel<Array<UploadableFile>>()
 const isModalOpen = ref<boolean>(false)
 const selectedPhoto = ref<UploadableFile | null>(null)
@@ -59,15 +70,40 @@ $blur-bg: rgba(0, 0, 0, 0.4);
 
 .preview {
   display: flex;
-  flex-flow: row nowrap;
   /* https://dev.to/janeori/css-fix-when-justify-content-space-evenly-overflows-un-center-the-content-4l50 */
   justify-content: safe center;
   align-items: center;
   overflow: scroll;
 
+  &--vertical {
+    flex-flow: column nowrap;
+  }
+
+  &--horizontal {
+    flex-flow: row nowrap;
+    margin: 10px 0;
+  }
+
+  /* The overrall block englobing container & slot */
+  &__block {
+    display: flex;
+
+    &--vertical {
+      flex-flow: row nowrap;
+    }
+
+    &--horizontal {
+      flex-flow: column nowrap;
+      margin: 10px 0;
+    }
+  }
+
+  /* Img container with overlay */
   &__container {
     margin: 0 10px;
     position: relative;
+    width: fit-content;
+    height: fit-content;
 
     &:hover {
       .preview__container__img {
