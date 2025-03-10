@@ -41,8 +41,8 @@
         ></textarea>
       </div>
 
-      <button type="submit" @click="triggerValidation">{{submitIcon}}
-        <v-icon class="photo-card__form__validate" :name="submitIcon" :animation="submitAnimation" scale="1.3" />
+      <button class="photo-card__form__validate" type="submit" @click="triggerValidation">
+        <v-icon :name="submitIcon" :animation="submitAnimation" scale="1.3" />
       </button>
     </form>
   </div>
@@ -181,7 +181,12 @@ const v$ = useVuelidate(formRules, draftRecord)
       position: absolute;
       right: 0;
       top: 0;
-      color: var(--color-text);
+      background: none;
+      color: inherit;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      outline: inherit;
     }
   }
 }
