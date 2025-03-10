@@ -5,9 +5,15 @@ import { createPinia } from 'pinia'
 
 import { OhVueIcon, addIcons } from "oh-vue-icons"
 import {
+  BiCalendarDateFill,
+  BiCloudArrowUpFill,
+  BiCloudCheckFill,
+  BiCloudSlashFill,
   CoFullscreen,
   IoClose,
-  IoTrashBinSharp
+  IoTrashBinSharp,
+  MdErrorOutlined,
+  MdPending
 } from "oh-vue-icons/icons"
 
 import App from './App.vue'
@@ -23,7 +29,17 @@ app.use(Axios)
 app.use(ApiResolver)
 app.use(pinia)
 
-addIcons(CoFullscreen, IoClose, IoTrashBinSharp)
+addIcons(
+  BiCalendarDateFill,
+  BiCloudArrowUpFill,
+  BiCloudCheckFill,
+  BiCloudSlashFill,
+  CoFullscreen,
+  IoClose,
+  IoTrashBinSharp,
+  MdErrorOutlined,
+  MdPending
+)
 app.component("v-icon", OhVueIcon)
 
 app.mount('#app')

@@ -5,9 +5,6 @@
         <PhotoCard :modelValue="retreiveDraftRecord(photo)" @update:modelValue="onDraftRecordUpdate" />
       </template>
     </ImagePreview>
-
-    ALL: {{ records }}
-
   </div>
 </template>
 
