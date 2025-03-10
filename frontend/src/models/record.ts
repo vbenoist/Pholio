@@ -26,7 +26,7 @@ export class DraftRecord {
     this.draftId = uuidv4()
     this.description = null
     this.location = ''
-    this.date = new Date()
+    this.date = new Date(file.file.lastModified)
     this.file = file
   }
 }

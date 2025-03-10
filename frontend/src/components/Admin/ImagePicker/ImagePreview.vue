@@ -87,20 +87,23 @@ $blur-bg: rgba(0, 0, 0, 0.4);
   /* The overrall block englobing container & slot */
   &__block {
     display: flex;
+    margin: 10px 0;
 
     &--vertical {
       flex-flow: row nowrap;
+      border: 1px;
+      border-style: none solid none none;
+      box-shadow: 10px 0px 10px -5px #3c3c3c;
     }
 
     &--horizontal {
       flex-flow: column nowrap;
-      margin: 10px 0;
     }
   }
 
   /* Img container with overlay */
   &__container {
-    margin: 0 10px;
+    margin: auto 10px;
     position: relative;
     width: fit-content;
     height: fit-content;

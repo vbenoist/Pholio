@@ -39,7 +39,7 @@ import fileManager from '@/composables/fileManager'
 import type { UploadableFile } from '@/models/uploadableFile'
 
 const filesModel = defineModel<Array<UploadableFile>>()
-const photoInput = useTemplateRef('photo-drop-input')
+const photoInput = useTemplateRef<HTMLInputElement>('photo-drop-input')
 const {
   addMergeFiles,
   convertFileListArray
@@ -50,18 +50,16 @@ const onInputChange = (e: Event) => {
   if(!e.target.files) return
 
   filesModel.value = addMergeFiles(convertFileListArray(e.target.files))
-  console.log(filesModel.value)
 	e.target.value = ''
 }
 
 const addFiles = (e: Array<File>) => {
   filesModel.value = addMergeFiles(e)
-  console.log(filesModel.value)
 }
 
 const triggerInput = () => {
   if(!photoInput.value) return
-  (photoInput.value as HTMLElement).click()
+  photoInput.value?.click()
 }
 </script>
 
