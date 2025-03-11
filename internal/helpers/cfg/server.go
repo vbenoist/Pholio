@@ -23,9 +23,14 @@ type ApiConfig struct {
 	Port string
 }
 
+type FileManagerConfig struct {
+	UploadPath string
+}
+
 type ServerConfig struct {
-	Instance ApiConfig
-	Database DatabaseConfig
+	Instance    ApiConfig
+	Database    DatabaseConfig
+	FileManager FileManagerConfig
 }
 
 func SetServerConfig() ServerConfig {
@@ -52,6 +57,9 @@ func SetServerConfig() ServerConfig {
 				Username: viper.GetString("database.username"),
 				Password: viper.GetString("database.password"),
 			},
+		},
+		FileManager: FileManagerConfig{
+			UploadPath: viper.GetString("fileManager.upload_path"),
 		},
 	}
 }

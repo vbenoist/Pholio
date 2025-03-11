@@ -13,8 +13,8 @@ import (
 
 func AddRecords(c *gin.Context) {
 	var records []models.DraftRecord
-	err := c.BindJSON(&records)
 
+	err := c.BindJSON(&records)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error::query": getGenericError(err)})
 		return
@@ -28,7 +28,6 @@ func AddRecords(c *gin.Context) {
 		_, err = collection.InsertMany(c, []interface{}{records})
 	*/
 	_, err = collection.InsertMany(c, []any{records})
-
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		c.JSON(500, gin.H{"error::database": "Error while inserting records in database"})
@@ -40,16 +39,16 @@ func AddRecords(c *gin.Context) {
 
 func AddRecord(c *gin.Context) {
 	var record models.DraftRecord
-	err := c.BindJSON(&record)
 
+	err := c.BindJSON(&record)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error::query": getGenericError(err)})
 		return
 	}
 
 	collection := connector.GetCollection("records")
-	res, err := collection.InsertOne(c, record)
 
+	res, err := collection.InsertOne(c, record)
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		c.JSON(500, gin.H{"error::database": "Error while inserting records in database"})
@@ -61,8 +60,8 @@ func AddRecord(c *gin.Context) {
 
 func EditRecord(c *gin.Context) {
 	var record models.DraftRecord
-	err := c.BindJSON(&record)
 
+	err := c.BindJSON(&record)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error::query": getGenericError(err)})
 		return
@@ -71,8 +70,8 @@ func EditRecord(c *gin.Context) {
 	collection := connector.GetCollection("records")
 	id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	res, err := collection.ReplaceOne(c, filter, record)
 
+	res, err := collection.ReplaceOne(c, filter, record) // use findOneOrReplace ?
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		c.JSON(500, gin.H{"error::database": "Error while updating record in database"})
@@ -80,6 +79,7 @@ func EditRecord(c *gin.Context) {
 	}
 
 	if res.ModifiedCount == 0 {
+		// err == mongo.ErrNoDocuments
 		c.JSON(http.StatusNotFound, gin.H{"error::database": "Error while retreiving record in database"})
 		return
 	}
@@ -91,8 +91,8 @@ func RemoveRecord(c *gin.Context) {
 	collection := connector.GetCollection("records")
 	id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 	filter := bson.D{primitive.E{Key: "_id", Value: id}}
-	res, err := collection.DeleteOne(c, filter)
 
+	res, err := collection.DeleteOne(c, filter)
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		c.JSON(500, gin.H{"error::database": "Error while deleting record from database"})

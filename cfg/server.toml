@@ -6,6 +6,14 @@ name = "pholio"
 username = "root"
 password = "example"
 
-
 [api]
 listening_port = "8081"
+
+[fileManager]
+# upload_path can be a relative or an absolute path :
+# upload_path = "/home/dupont/uploads"
+# OR 
+# upload_path = "uploads"
+# Just ensure that the executable user has sufficient
+# rights to write in given folder
+upload_path = "/home/moi/uploads"
