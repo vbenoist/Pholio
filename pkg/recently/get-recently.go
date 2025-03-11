@@ -12,8 +12,10 @@ import (
 
 func GetRecentlyContent(c *gin.Context) {
 	/* Connecting to recently collection */
-	collection := connector.GetCollection("recently")
+	collection := connector.GetCollection("records")
 	/* Getting collections. bson.D{} stands for "no filter" */
+	/* TODO : Add filter for max date */
+	/* TODO : Add pagination */
 	cursor, err := collection.Find(context.Background(), bson.D{})
 
 	if err != nil {

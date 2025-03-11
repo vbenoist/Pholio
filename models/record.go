@@ -3,11 +3,11 @@ package models
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Record struct {
-	Id          primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	NativImgSrc string             `json:"nativImgSrc,omitempty" validate:"required"`
-	MidImgSrc   string             `json:"midImgSrc,omitempty" validate:"required"`
-	ThumbImgSrc string             `json:"thumbImgSrc,omitempty" validate:"required"`
-	Description string             `json:"description,omitempty"`
-	Location    string             `json:"location,omitempty" validate:"required"`
-	Date        primitive.DateTime `json:"date,omitempty" validate:"required"`
+	Id          primitive.ObjectID `bson:"_id" json:"id"`
+	NativImgSrc string             `json:"nativImgSrc"`
+	MidImgSrc   string             `json:"midImgSrc"`
+	ThumbImgSrc string             `json:"thumbImgSrc"`
+	Description string             `json:"description"`
+	Location    string             `json:"location"`
+	Date        primitive.DateTime `json:"date"`
 }
