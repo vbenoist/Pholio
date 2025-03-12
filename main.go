@@ -14,6 +14,7 @@ func setupRouter() *gin.Engine {
 	// Disable Console Color
 	// gin.DisableConsoleColor()
 	router := gin.Default()
+	router.Use(gin.Recovery())
 
 	// Ping test
 	router.GET("/ping", func(c *gin.Context) {

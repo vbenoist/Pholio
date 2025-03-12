@@ -2,15 +2,13 @@ package image
 
 import (
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackidu14/pholio/internal/database/connector"
 	"github.com/jackidu14/pholio/internal/helpers/cfg"
+	"github.com/jackidu14/pholio/internal/helpers/file"
 	"github.com/jackidu14/pholio/internal/helpers/image"
-	"github.com/jackidu14/pholio/models"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func AddImage(c *gin.Context) {
@@ -27,23 +25,9 @@ func AddImage(c *gin.Context) {
 		return
 	}
 
-	/* Checking if given record id exists in database */
-	recordId := c.Param("id")
-	objRecordId, _ := primitive.ObjectIDFromHex(recordId)
-	filter := bson.D{primitive.E{Key: "_id", Value: objRecordId}}
-
-	var result models.Record
-	collection := connector.GetCollection("records")
-
-	err = collection.FindOne(c, filter).Decode(&result)
-	if err != nil {
-		c.JSON(500, gin.H{"error::database": "Error while retreiving related record in database"})
-		return
-	}
-
 	/* Building final path destination & writing file */
 	config := cfg.SetServerConfig()
-	fullPath := fmt.Sprintf("%s/%s/original.%s", config.FileManager.UploadPath, recordId, fileType[1])
+	fullPath := fmt.Sprintf("%s/%s/original.%s", config.FileManager.UploadPath, c.Param("id"), fileType[1])
 
 	err = c.SaveUploadedFile(file, fullPath)
 	if err != nil {
@@ -56,4 +40,19 @@ func AddImage(c *gin.Context) {
 	go image.ResizeImageMid(fullPath)
 
 	c.JSON(200, "Done")
+}
+
+func GetThumbImage(c *gin.Context) {
+	fullPath := file.GetFileFullpath(c.Param("id"), image.Thumb)
+	http.ServeFile(c.Writer, c.Request, fullPath)
+}
+
+func GetMidImage(c *gin.Context) {
+	fullPath := file.GetFileFullpath(c.Param("id"), image.Mid)
+	http.ServeFile(c.Writer, c.Request, fullPath)
+}
+
+func GetOrigImage(c *gin.Context) {
+	fullPath := file.GetFileFullpath(c.Param("id"), image.Orig)
+	http.ServeFile(c.Writer, c.Request, fullPath)
 }

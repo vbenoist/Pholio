@@ -3,7 +3,6 @@ package connector
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/jackidu14/pholio/internal/helpers/cfg"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,12 +17,12 @@ func Connect() *mongo.Client {
 
 	dbclient, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	err = dbclient.Ping(context.Background(), nil)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	fmt.Println("Connected to MongoDB")
 
@@ -39,7 +38,7 @@ func GetDatabase() *mongo.Database {
 	pholioDatabase := client.Database(config.Database.Name)
 
 	if pholioDatabase == nil {
-		log.Fatal("No matching database has been found.")
+		panic("No matching database has been found.")
 	}
 
 	return pholioDatabase

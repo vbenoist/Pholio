@@ -57,9 +57,14 @@ func resizeImage(params ResizeConfig) error {
 		fileCategoryName = "midsize"
 	}
 
+	finalFileExt := fileExt
+	if params.ForceToJpeg {
+		finalFileExt = "jpeg"
+	}
+
 	fullPathEls := strings.Split(params.FullPath, "/")
 	fullPathDir := strings.Join(fullPathEls[:len(fullPathEls)-1], "/")
-	outFullPath := fmt.Sprintf("%s/%s.%s", fullPathDir, fileCategoryName, fileExt)
+	outFullPath := fmt.Sprintf("%s/%s.%s", fullPathDir, fileCategoryName, finalFileExt)
 
 	fmt.Printf("outFullPath: %s", outFullPath)
 	out, err := os.Create(outFullPath)
