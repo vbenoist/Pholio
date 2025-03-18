@@ -11,6 +11,7 @@
           :key="`img-last-add-${key}`"
           class="container__content__list__item"
           :src="itm.thumbImgSrc"
+          :alt="itm.description"
         />
       </div>
     </div>
@@ -18,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { Item } from '@/stores/recentlyContent'
+import type { Item } from '@/stores/recentlyContent'
 
 const props = defineProps({
   title: String,
