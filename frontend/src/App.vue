@@ -1,31 +1,29 @@
 <template>
-  <header v-if="!isAdminRoute">
-      <BannerHeader />
-      <BannerMenu class="banner-menu" />
-  </header>
-
-  <RouterView />
+  <component :is="layouts[routeLayout]">
+    <slot>
+      <RouterView />
+    </slot>
+  </component>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import BannerHeader from '@/components/Common/BannerHeader.vue'
-import BannerMenu from '@/components/Common/BannerMenu.vue'
+import LayoutAdmin from '@/layouts/LayoutAdmin.vue'
+import LayoutGuest from '@/layouts/LayoutGuest.vue'
 
 const route = useRoute()
 
-const isAdminRoute = computed(() => {
-  return route.fullPath.includes('admin')
+const layouts = {
+  LayoutAdmin,
+  LayoutGuest
+}
+
+const routeLayout = computed<keyof typeof layouts>(() => {
+  if(!route.meta.layout) return 'LayoutGuest'
+
+  const meta = String(route.meta.layout)
+  const formatted = meta[0].toUpperCase() + meta.slice(1)
+  return `Layout${formatted}`
 })
-
 </script>
-
-<style scoped>
-.banner-menu {
-  margin: 40px 0;
-}
-
-@media (min-width: 1024px) {
-}
-</style>

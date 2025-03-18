@@ -9,43 +9,45 @@ export type RoutesNames = 'RECENT' | 'DATE' | 'LOCATION' | 'PINED'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: HomeView,
-    // },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue'),
-    // },
     {
       path: '/',
       name: 'RECENT',
       component: Recently,
+      meta: {
+        layout: 'guest'
+      }
     },
     {
       path: '/per-date',
       name: 'DATE',
       component: HelloWorld,
+      meta: {
+        layout: 'guest'
+      }
     },
     {
       path: '/per-location',
       name: 'LOCATION',
       component: WelcomeItem,
+      meta: {
+        layout: 'guest'
+      }
     },
     {
       path: '/pin',
       name: 'PINED',
       component: TheWelcome,
+      meta: {
+        layout: 'guest'
+      }
     },
     {
       path: '/admin/add',
       name: 'ADMINADD',
       component: () => import('@/views/Admin/AddImages.vue'),
+      meta: {
+        layout: 'admin'
+      }
     },
   ],
 })
