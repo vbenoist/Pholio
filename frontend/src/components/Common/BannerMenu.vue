@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { RoutesNames } from '@/router/'
+import type { RoutesNames } from '@/router/index'
 
 const router = useRouter()
 

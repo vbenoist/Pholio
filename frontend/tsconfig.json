@@ -15,7 +15,7 @@
     "module": "NodeNext",
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   }
 }
