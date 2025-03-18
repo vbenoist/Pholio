@@ -3,8 +3,6 @@
     <form
       class="photo-card__form"
       @submit.prevent="handleSubmit"
-      @error="onSubmitError"
-      @invalid="onSubmitInvalid"
     >
       <div class="photo-card__form__section photo-card__form__section__date">
         <label :for="`draftrecord-date-${draftRecord.draftId}`" @click="triggerCalendar()">
@@ -42,20 +40,23 @@
       </div>
 
       <button class="photo-card__form__validate" type="submit" @click="triggerValidation">
-        <v-icon :name="submitIcon" :animation="submitAnimation" scale="1.3" />
+        <v-icon :name="submitIcon" :animation="submitAnimation" :hover="submitAnimationHover" scale="1.3" />
       </button>
     </form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, defineModel, useTemplateRef } from 'vue'
+import { computed, defineModel, inject, useTemplateRef } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { maxLength, minLength, required } from '@vuelidate/validators'
+import type { ApiResolver } from '@/plugins/apiResolver'
 import type { DraftRecord } from '@/models/record'
+import { draftRecordToApiRecord } from '@/transformers/record'
 
 const draftRecord = defineModel<DraftRecord>({ default: null })
 const calendarInputRef = useTemplateRef<HTMLInputElement>(`draftrecord-date`)
+const apiResolver = inject('$apiResolver') as ApiResolver
 
 const formRules = {
   description: { maxLengthValue: maxLength(100) },
@@ -85,21 +86,37 @@ const inputDate = computed<string>({
   }
 })
 
-const handleSubmit = (e: Event) => {
-  console.log("handleSubmit", e)
+const handleSubmit = async () => {
   draftRecord.value.file.status = 'SENDING'
+
+  const apiFormattedRecord = draftRecordToApiRecord(draftRecord.value)
+
+  /* If first attempt or previous attempted has failed on sending record data */
+  if(draftRecord.value.status === 'PENDING' || draftRecord.value.status === 'FAILED') {
+    const resId = await apiResolver.addRecord(apiFormattedRecord)
+
+    if(!resId) {
+      draftRecord.value.status = 'FAILED'
+      return
+    } else {
+      draftRecord.value.draftId = resId
+      draftRecord.value.status = 'SENT'
+    }
+  }
+
+  /* Linking photo to freshly saved record */
+  await saveLinkedImage()
+}
+
+const saveLinkedImage = (): Promise<void> => {
+  return apiResolver.linkImageRecord(draftRecord.value.draftId, draftRecord.value.file)
+    .then(success => {
+      draftRecord.value.file.status = success ? 'SENT' : 'FAILED'
+    })
 }
 
 const triggerValidation = () => {
   v$.value.$touch()
-}
-
-const onSubmitError = (e: any) => {
-  console.log(e)
-}
-
-const onSubmitInvalid = (e: any) => {
-  console.log(e)
 }
 
 const triggerCalendar = () => {
@@ -108,6 +125,7 @@ const triggerCalendar = () => {
 
 const submitIcon = computed<string>(() => {
   if(v$.value.$error) return 'md-error-outlined'
+  if(draftRecord.value.status === 'FAILED') return 'bi-cloud-slash-fill'
   if(draftRecord.value.file.status === 'SENDING') return 'md-pending'
   if(draftRecord.value.file.status === 'FAILED') return 'bi-cloud-slash-fill'
   if(draftRecord.value.file.status === 'SENT') return 'bi-cloud-check-fill'
@@ -115,7 +133,11 @@ const submitIcon = computed<string>(() => {
 })
 
 const submitAnimation = computed<string>(() => {
-  return draftRecord.value.file.status === 'SENDING' ? 'float' : ''
+  return draftRecord.value.file.status === 'SENDING' ? 'float' : 'wrench'
+})
+
+const submitAnimationHover = computed<boolean>(() => {
+  return draftRecord.value.file.status !== 'SENDING'
 })
 
 const v$ = useVuelidate(formRules, draftRecord)
