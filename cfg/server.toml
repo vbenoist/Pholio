@@ -9,6 +9,9 @@ password = "example"
 [api]
 listening_port = "8081"
 
+[front]
+url = "http://localhost:5173"
+
 [fileManager]
 # upload_path can be a relative or an absolute path :
 # upload_path = "/home/dupont/uploads"

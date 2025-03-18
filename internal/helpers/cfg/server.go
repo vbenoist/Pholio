@@ -23,12 +23,17 @@ type ApiConfig struct {
 	Port string
 }
 
+type FrontConfig struct {
+	Url string
+}
+
 type FileManagerConfig struct {
 	UploadPath string
 }
 
 type ServerConfig struct {
 	Instance    ApiConfig
+	Front       FrontConfig
 	Database    DatabaseConfig
 	FileManager FileManagerConfig
 }
@@ -46,6 +51,9 @@ func SetServerConfig() ServerConfig {
 	return ServerConfig{
 		Instance: ApiConfig{
 			Port: viper.GetString("api.listening_port"),
+		},
+		Front: FrontConfig{
+			Url: viper.GetString("front.url"),
 		},
 		Database: DatabaseConfig{
 			Type:       viper.GetString("database.type"),
