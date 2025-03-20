@@ -16,6 +16,7 @@ import type { UploadableFile } from "./uploadableFile"
 // }
 
 export type DraftRecordStatus = 'PENDING' | 'FAILED' | 'SENT'
+
 export class DraftRecord {
   draftId: string
   description: string | null

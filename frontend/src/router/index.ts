@@ -6,7 +6,7 @@ export const routes = [
   {
     path: '/',
     name: 'RECENT',
-    component: import('@/views/Recently.vue'),
+    component: () => import('@/views/Recently.vue'),
     meta: {
       layout: 'guest'
     }
@@ -14,7 +14,7 @@ export const routes = [
   {
     path: '/per-date',
     name: 'DATE',
-    component: import('@/views/Recently.vue'),
+    component: () => import('@/views/Recently.vue'),
     meta: {
       layout: 'guest'
     }
@@ -22,7 +22,7 @@ export const routes = [
   {
     path: '/per-location',
     name: 'LOCATION',
-    component: import('@/views/Recently.vue'),
+    component: () => import('@/views/Recently.vue'),
     meta: {
       layout: 'guest'
     }
@@ -30,7 +30,7 @@ export const routes = [
   {
     path: '/pin',
     name: 'PINED',
-    component: import('@/views/Recently.vue'),
+    component: () => import('@/views/Recently.vue'),
     meta: {
       layout: 'guest'
     }

@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { flushPromises, mount } from "@vue/test-utils"
 import { createRouter, createWebHistory } from 'vue-router'
 import BannerMenu from '@/components/Common/BannerMenu.vue'
@@ -25,6 +25,7 @@ test('checking menu list', async () => {
 test('checking menu nav actions', async () => {
   router.push('/')
   await router.isReady()
+  const routerSpy = vi.spyOn(router, 'push')
 
   const wrapper = mount(BannerMenu, {
     global: {
@@ -42,4 +43,6 @@ test('checking menu nav actions', async () => {
     await flushPromises()
     expect(wrapper.vm.$route.name).toEqual(navOrder[i])
   }
+
+  expect(routerSpy.mock.calls.length).toEqual(4)
 })

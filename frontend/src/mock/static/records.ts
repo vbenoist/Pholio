@@ -1,5 +1,7 @@
-import type { Item } from '@/stores/recentlyContent'
 import { v4 as uuidv4 } from 'uuid'
+import { DraftRecord } from '@/models/record'
+import type { Item } from '@/stores/recentlyContent'
+import { mockUplaodableFile } from '@/mock/static/uploadableFile'
 
 const fakeDescriptions = [
   "Matin du 31 octobre, après quelques chutes de neige sur les hauteurs",
@@ -48,6 +50,17 @@ export const mockRecords = (length: number): Array<Item> => {
       location: fakeLocations[rndLocation],
       date: new Date(fakeDates[rndDates])
     })
+  }
+
+  return result
+}
+
+export const mockDraftRecords = (length: number): Array<DraftRecord> => {
+  const result: Array<DraftRecord> = []
+  const files = mockUplaodableFile(length)
+
+  for(let i=0; i<length; i++) {
+    result.push(new DraftRecord(files[i]))
   }
 
   return result

@@ -18,24 +18,6 @@ import ImagePreview from '@/components/Admin/ImagePicker/ImagePreview.vue'
 const photos = defineModel<Array<UploadableFile>>({ default: [] })
 const records = ref<Array<DraftRecord>>([])
 
-// /* Only for drawing */
-// const draftRecords = computed<Array<DraftRecord>>({
-//   get(prev) {
-//     /*
-//       If a draft record has already been created for this photo,
-//       returning it without recreating a new one, preventing a loss
-//       of already configured data
-//     */
-//     return toRaw(photos.value).map(p => {
-//       const existingRecord = prev?.find(r => r.file.id === p.id)
-//       return existingRecord ? existingRecord : new DraftRecord(p)
-//     })
-//   },
-//   set(val) {
-//     records.value = val
-//   }
-// })
-
 watch(photos, () => {
   updateRecords()
 })

@@ -10,5 +10,15 @@ export default mergeConfig(
       exclude: [...configDefaults.exclude, 'e2e/**'],
       root: fileURLToPath(new URL('./', import.meta.url)),
     },
+    // plugins: [
+    //   vue({
+    //     template: {
+    //       compilerOptions: {
+    //         // isCustomElement: (tag: string) => ['v-icon'].includes(tag)
+    //         isCustomElement: (tag: string) => tag === 'v-icon'
+    //       }
+    //     }
+    //   })
+    // ]
   }),
 )
