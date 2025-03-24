@@ -43,16 +43,34 @@ func AddImage(c *gin.Context) {
 }
 
 func GetThumbImage(c *gin.Context) {
-	fullPath := file.GetFileFullpath(c.Param("id"), image.Thumb)
+	fullPath, err := file.GetFileFullpath(c.Param("id"), image.Thumb)
+
+	if err != nil {
+		c.JSON(400, gin.H{"error::file": "No thumb found for this record"})
+		return
+	}
+
 	http.ServeFile(c.Writer, c.Request, fullPath)
 }
 
 func GetMidImage(c *gin.Context) {
-	fullPath := file.GetFileFullpath(c.Param("id"), image.Mid)
+	fullPath, err := file.GetFileFullpath(c.Param("id"), image.Mid)
+
+	if err != nil {
+		c.JSON(400, gin.H{"error::file": "No midsize found for this record"})
+		return
+	}
+
 	http.ServeFile(c.Writer, c.Request, fullPath)
 }
 
 func GetOrigImage(c *gin.Context) {
-	fullPath := file.GetFileFullpath(c.Param("id"), image.Orig)
+	fullPath, err := file.GetFileFullpath(c.Param("id"), image.Orig)
+
+	if err != nil {
+		c.JSON(400, gin.H{"error::file": "No image found for this record"})
+		return
+	}
+
 	http.ServeFile(c.Writer, c.Request, fullPath)
 }

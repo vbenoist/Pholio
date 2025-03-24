@@ -7,15 +7,16 @@ import (
 
 	"github.com/jackidu14/pholio/internal/helpers/cfg"
 	"github.com/jackidu14/pholio/internal/helpers/image"
+	"github.com/pkg/errors"
 )
 
-func GetFileFullpath(recordId string, fileType image.ResizeImageType) string {
+func GetFileFullpath(recordId string, fileType image.ResizeImageType) (string, error) {
 	config := cfg.SetServerConfig()
 	folderPath := fmt.Sprintf("%s/%s/", config.FileManager.UploadPath, recordId)
 
 	folder, err := os.ReadDir(folderPath)
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	var fileName string
@@ -32,8 +33,8 @@ func GetFileFullpath(recordId string, fileType image.ResizeImageType) string {
 	}
 
 	if fileName == "" {
-		panic("No corresponding file has been found")
+		return "", errors.New("No corresponding file has been found")
 	}
 
-	return folderPath + fileName
+	return folderPath + fileName, nil
 }
