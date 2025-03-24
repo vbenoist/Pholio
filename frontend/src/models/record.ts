@@ -1,20 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import type { UploadableFile } from "./uploadableFile"
 
-// export class Record {
-//   id: string
-//   nativImgSrc: string
-//   midImgSrc:   string
-//   thumbImgSrc: string
-//   description: string | null
-//   location:    string
-//   date:        Date
-
-//   constructor(file: File) {
-
-//   }
-// }
-
 export type DraftRecordStatus = 'PENDING' | 'FAILED' | 'SENT'
 
 export class DraftRecord {

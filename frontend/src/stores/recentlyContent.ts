@@ -2,19 +2,11 @@ import type { Ref } from 'vue'
 import { inject, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { ApiResolver } from "@/plugins/apiResolver"
+import type { ApiGetRecord } from '@/models/api/record'
 
 export type RecentlyContent = {
-  lastly: Array<Item>
-  lately: Array<Item>
-}
-
-export type Item = {
-  nativImgSrc: string
-  midImgSrc: string
-  thumbImgSrc: string
-  description: string
-  location: string
-  date: Date
+  lastly: Array<ApiGetRecord>
+  lately: Array<ApiGetRecord>
 }
 
 export const useRecentlyContentStore = defineStore('recentlyContent', () => {

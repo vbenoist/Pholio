@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import { DraftRecord } from '@/models/record'
-import type { Item } from '@/stores/recentlyContent'
+import type { ApiGetRecord } from '@/models/api/record'
 import { mockUplaodableFile } from '@/mock/static/uploadableFile'
 
 const fakeDescriptions = [
@@ -33,8 +33,8 @@ const fakeDates = [
   "2025-03-16"
 ]
 
-export const mockRecords = (length: number): Array<Item> => {
-  const result: Array<Item> = []
+export const mockRecords = (length: number): Array<ApiGetRecord> => {
+  const result: Array<ApiGetRecord> = []
 
   for(let i=0; i<length; i++) {
     const uuid = uuidv4()
@@ -43,9 +43,7 @@ export const mockRecords = (length: number): Array<Item> => {
     const rndDates = getRnd(fakeDates.length)
 
     result.push({
-      nativImgSrc: `http://localfake:5050/${uuid}/original.png`,
-      midImgSrc: `http://localfake:5050/${uuid}/midsize.png`,
-      thumbImgSrc: `http://localfake:5050/${uuid}/thumb.png`,
+      id: uuid,
       description: fakeDescriptions[rndDescription],
       location: fakeLocations[rndLocation],
       date: new Date(fakeDates[rndDates])

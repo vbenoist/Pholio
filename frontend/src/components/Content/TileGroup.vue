@@ -10,8 +10,8 @@
           v-for="(itm, key) in props.items"
           :key="`img-last-add-${key}`"
           class="container__content__list__item"
-          :src="itm.thumbImgSrc"
-          :alt="itm.description"
+          :src="apiPathBuilder.buildRecordThumbUrl(itm)"
+          :alt="itm.description ?? itm.location"
         />
       </div>
     </div>
@@ -19,12 +19,17 @@
 </template>
 
 <script setup lang="ts">
-import type { Item } from '@/stores/recentlyContent'
+import { inject } from 'vue'
+import type { ApiGetRecord } from '@/models/api/record'
+import { ApiPathBuilder } from '@/plugins/apiPathBuilder'
+
+const apiPathBuilder = inject('$apiPathBuilder') as ApiPathBuilder
 
 const props = defineProps({
   title: String,
-  items: Array<Item>,
+  items: Array<ApiGetRecord>,
 })
+
 </script>
 
 <style lang="scss" scoped>

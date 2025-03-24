@@ -20,6 +20,7 @@ import App from './App.vue'
 import router from './router'
 import Axios from './plugins/axios'
 import ApiResolver from './plugins/apiResolver'
+import ApiPathBuild from './plugins/apiPathBuilder'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -27,6 +28,7 @@ const pinia = createPinia()
 app.use(router)
 app.use(Axios)
 app.use(ApiResolver)
+app.use(ApiPathBuild)
 app.use(pinia)
 
 addIcons(
