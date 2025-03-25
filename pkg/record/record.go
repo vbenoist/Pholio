@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackidu14/pholio/internal/database/connector"
+	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
 	"github.com/jackidu14/pholio/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -55,6 +56,18 @@ func AddRecord(c *gin.Context) {
 		return
 	}
 
+	/*
+		res.InsertedID is a generic type (interface ~= any)
+		Create an ObjectId from InsertedId, and then, extract the hex value
+	*/
+	objId := res.InsertedID.(primitive.ObjectID)
+	_, err = imagetracking.AddRecordImageTracking(objId.Hex())
+	if err != nil {
+		fmt.Printf("%s\n", err)
+		c.JSON(500, gin.H{"error::database": "Error while adding records image tracking"})
+		return
+	}
+
 	c.JSON(200, res.InsertedID)
 }
 
@@ -71,7 +84,7 @@ func EditRecord(c *gin.Context) {
 	id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 	filter := bson.D{primitive.E{Key: "_id", Value: id}}
 
-	res, err := collection.ReplaceOne(c, filter, record) // use findOneOrReplace ?
+	res, err := collection.ReplaceOne(c, filter, record)
 	if err != nil {
 		fmt.Printf("%s\n", err)
 		c.JSON(500, gin.H{"error::database": "Error while updating record in database"})

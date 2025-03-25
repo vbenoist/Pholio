@@ -9,6 +9,9 @@ import (
 	"github.com/jackidu14/pholio/internal/helpers/cfg"
 	"github.com/jackidu14/pholio/internal/helpers/file"
 	"github.com/jackidu14/pholio/internal/helpers/image"
+	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func AddImage(c *gin.Context) {
@@ -26,8 +29,9 @@ func AddImage(c *gin.Context) {
 	}
 
 	/* Building final path destination & writing file */
+	relatedRecordId := c.Param("id")
 	config := cfg.SetServerConfig()
-	fullPath := fmt.Sprintf("%s/%s/original.%s", config.FileManager.UploadPath, c.Param("id"), fileType[1])
+	fullPath := fmt.Sprintf("%s/%s/original.%s", config.FileManager.UploadPath, relatedRecordId, fileType[1])
 
 	err = c.SaveUploadedFile(file, fullPath)
 	if err != nil {
@@ -35,9 +39,17 @@ func AddImage(c *gin.Context) {
 		return
 	}
 
+	/* Updating image tracking status */
+	_, err = imagetracking.UpdateRecordImageTracking(relatedRecordId, bson.D{primitive.E{Key: "Uploaded", Value: true}})
+
+	if err != nil {
+		c.JSON(500, "Err")
+		return
+	}
+
 	/* No need to wait for theses tasks */
-	go image.ResizeImageThumb(fullPath)
-	go image.ResizeImageMid(fullPath)
+	go image.ResizeImageThumb(relatedRecordId, fullPath)
+	go image.ResizeImageMid(relatedRecordId, fullPath)
 
 	c.JSON(200, "Done")
 }
