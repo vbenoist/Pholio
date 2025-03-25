@@ -13,6 +13,7 @@ const (
 )
 
 type RecordImageTracking struct {
+	Id              primitive.ObjectID `bson:"_id" json:"id"`
 	RecordId        primitive.ObjectID
 	Uploaded        bool
 	ThumbConverting ImageStatus

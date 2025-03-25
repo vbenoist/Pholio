@@ -25,7 +25,7 @@ func AddRecordImageTracking(recordId string) (*mongo.InsertOneResult, error) {
 	collection := connector.GetCollection("image-status")
 	rcid, _ := primitive.ObjectIDFromHex(recordId)
 
-	imageTracking := models.RecordImageTracking{RecordId: rcid}
+	imageTracking := models.RecordImageTracking{Id: primitive.NewObjectID(), RecordId: rcid}
 	return collection.InsertOne(context.TODO(), imageTracking)
 }
 

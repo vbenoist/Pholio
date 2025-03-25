@@ -1,0 +1,16 @@
+[database]
+type = "mongo"
+host = "127.0.0.1"
+port = "27017"
+name = "pholio"
+username = "root"
+password = "example"
+
+[api]
+listening_port = "8081"
+
+[front]
+url = "http://localhost:5173"
+
+[fileManager]
+upload_path = "/home/moi/uploads"

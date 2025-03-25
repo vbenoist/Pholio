@@ -41,7 +41,10 @@ type ServerConfig struct {
 func SetServerConfig() ServerConfig {
 	viper.SetConfigName("server")
 	viper.SetConfigType("toml")
-	viper.AddConfigPath("./cfg")
+	/* Normal runtime */
+	viper.AddConfigPath("./configs")
+	/* Tests runtime */
+	viper.AddConfigPath("../configs")
 
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
