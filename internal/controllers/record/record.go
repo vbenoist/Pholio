@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackidu14/pholio/internal/database/connector"
+	"github.com/jackidu14/pholio/internal/models"
 	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
-	"github.com/jackidu14/pholio/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

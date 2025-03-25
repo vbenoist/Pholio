@@ -8,8 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackidu14/pholio/internal/helpers/cfg"
 	"github.com/jackidu14/pholio/internal/helpers/file"
-	"github.com/jackidu14/pholio/internal/helpers/image"
+	imageIntlHelper "github.com/jackidu14/pholio/internal/helpers/image"
 	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
+	imageGlobHelper "github.com/jackidu14/pholio/pkg/helpers/image"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -48,14 +49,14 @@ func AddImage(c *gin.Context) {
 	}
 
 	/* No need to wait for theses tasks */
-	go image.ResizeImageThumb(relatedRecordId, fullPath)
-	go image.ResizeImageMid(relatedRecordId, fullPath)
+	go imageIntlHelper.ResizeImageThumb(relatedRecordId, fullPath)
+	go imageIntlHelper.ResizeImageMid(relatedRecordId, fullPath)
 
 	c.JSON(200, "Done")
 }
 
 func GetThumbImage(c *gin.Context) {
-	fullPath, err := file.GetFileFullpath(c.Param("id"), image.Thumb)
+	fullPath, err := file.GetFileFullpath(c.Param("id"), imageGlobHelper.Thumb)
 
 	if err != nil {
 		c.JSON(400, gin.H{"error::file": "No thumb found for this record"})
@@ -66,7 +67,7 @@ func GetThumbImage(c *gin.Context) {
 }
 
 func GetMidImage(c *gin.Context) {
-	fullPath, err := file.GetFileFullpath(c.Param("id"), image.Mid)
+	fullPath, err := file.GetFileFullpath(c.Param("id"), imageGlobHelper.Mid)
 
 	if err != nil {
 		c.JSON(400, gin.H{"error::file": "No midsize found for this record"})
@@ -77,7 +78,7 @@ func GetMidImage(c *gin.Context) {
 }
 
 func GetOrigImage(c *gin.Context) {
-	fullPath, err := file.GetFileFullpath(c.Param("id"), image.Orig)
+	fullPath, err := file.GetFileFullpath(c.Param("id"), imageGlobHelper.Orig)
 
 	if err != nil {
 		c.JSON(400, gin.H{"error::file": "No image found for this record"})

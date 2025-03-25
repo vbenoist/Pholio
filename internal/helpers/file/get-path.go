@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/jackidu14/pholio/internal/helpers/cfg"
-	"github.com/jackidu14/pholio/internal/helpers/image"
+	"github.com/jackidu14/pholio/pkg/helpers/image"
 	"github.com/pkg/errors"
 )
 

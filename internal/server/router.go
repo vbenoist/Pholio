@@ -2,9 +2,9 @@ package server
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jackidu14/pholio/pkg/image"
-	"github.com/jackidu14/pholio/pkg/recently"
-	"github.com/jackidu14/pholio/pkg/record"
+	"github.com/jackidu14/pholio/internal/controllers/image"
+	"github.com/jackidu14/pholio/internal/controllers/recently"
+	"github.com/jackidu14/pholio/internal/controllers/record"
 )
 
 func RegisterRoutes(router *gin.Engine) {

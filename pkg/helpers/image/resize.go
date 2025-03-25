@@ -27,7 +27,7 @@ type ResizeConfig struct {
 	ForceToJpeg  bool
 }
 
-func resizeImage(params ResizeConfig) error {
+func ResizeImage(params ResizeConfig) error {
 	file, err := os.Open(params.FullPath)
 	if err != nil {
 		return err
