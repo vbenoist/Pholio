@@ -45,6 +45,7 @@ func SetServerConfig() ServerConfig {
 	viper.AddConfigPath("./configs")
 	/* Tests runtime */
 	viper.AddConfigPath("../configs")
+	viper.AddConfigPath("../../configs")
 
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file

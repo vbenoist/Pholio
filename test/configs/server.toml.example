@@ -13,4 +13,4 @@ listening_port = "8081"
 url = "http://localhost:5173"
 
 [fileManager]
-upload_path = "/home/moi/uploads/tests"
+upload_path = "/home/moi/uploads"
