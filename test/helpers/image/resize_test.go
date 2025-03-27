@@ -18,7 +18,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+func TestResizeImageThumb(t *testing.T) {
+	testResizeImage(t, "thumb")
+}
+
 func TestResizeImageMid(t *testing.T) {
+	testResizeImage(t, "midsize")
+}
+
+func testResizeImage(t *testing.T, resizeType string) {
 	/* Preparing tests */
 	fakeRcId, fakeRcFullPath, err := prepareResizeImageTest()
 	if err != nil {
@@ -33,8 +41,12 @@ func TestResizeImageMid(t *testing.T) {
 	}
 
 	/* Checking file has been created */
-	image.ResizeImageMid(fakeRcId, fakeRcFullPath)
-	fakeMidsizeFilePath := strings.Replace(fakeRcFullPath, "original", "midsize", 1)
+	if resizeType == "thumb" {
+		image.ResizeImageThumb(fakeRcId, fakeRcFullPath)
+	} else {
+		image.ResizeImageMid(fakeRcId, fakeRcFullPath)
+	}
+	fakeMidsizeFilePath := strings.Replace(fakeRcFullPath, "original", resizeType, 1)
 	assert.FileExists(t, fakeMidsizeFilePath)
 
 	/* Checking file has been writted */
@@ -63,7 +75,11 @@ func TestResizeImageMid(t *testing.T) {
 		return
 	}
 
-	assert.Equal(t, recordImageTracking.MidConverting, models.ISDone)
+	if resizeType == "thumb" {
+		assert.Equal(t, recordImageTracking.ThumbConverting, models.ISDone)
+	} else {
+		assert.Equal(t, recordImageTracking.MidConverting, models.ISDone)
+	}
 }
 
 func prepareResizeImageTest() (string, string, error) {

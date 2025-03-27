@@ -58,7 +58,7 @@ func ResizeImage(params ResizeConfig) error {
 	}
 
 	finalFileExt := fileExt
-	if params.ForceToJpeg {
+	if params.ForceToJpeg && !(fileExt == "jpg" || fileExt == "jpeg") {
 		finalFileExt = "jpeg"
 	}
 
@@ -66,7 +66,7 @@ func ResizeImage(params ResizeConfig) error {
 	fullPathDir := strings.Join(fullPathEls[:len(fullPathEls)-1], "/")
 	outFullPath := fmt.Sprintf("%s/%s.%s", fullPathDir, fileCategoryName, finalFileExt)
 
-	fmt.Printf("outFullPath: %s", outFullPath)
+	fmt.Printf("outFullPath: %s\n", outFullPath)
 	out, err := os.Create(outFullPath)
 	if err != nil {
 		return err
