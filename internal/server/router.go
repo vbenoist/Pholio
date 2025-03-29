@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/jackidu14/pholio/internal/controllers/auth"
 	"github.com/jackidu14/pholio/internal/controllers/image"
 	"github.com/jackidu14/pholio/internal/controllers/recently"
 	"github.com/jackidu14/pholio/internal/controllers/record"
@@ -23,6 +24,7 @@ func SetupRouter(config cfg.ServerConfig) *gin.Engine {
 }
 
 func RegisterRoutes(router *gin.Engine) {
+	auth.RegisterRoutes(router)
 	record.RegisterRoutes(router)
 	recently.RegisterRoutes(router)
 	image.RegisterRoutes(router)

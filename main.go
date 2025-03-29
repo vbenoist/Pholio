@@ -4,15 +4,17 @@ import (
 	"fmt"
 
 	"github.com/jackidu14/pholio/internal/database/connector"
+	"github.com/jackidu14/pholio/internal/helpers/auth"
 	"github.com/jackidu14/pholio/internal/helpers/cfg"
-	"github.com/jackidu14/pholio/internal/server"
+	routerserver "github.com/jackidu14/pholio/internal/server"
 )
 
 func main() {
-	config := cfg.SetServerConfig()
+	config := cfg.GetServerConfig()
 	connector.Connect()
 	defer connector.Disconnect()
+	auth.InitServerDatabase()
 
-	router := server.SetupRouter(config)
+	router := routerserver.SetupRouter(config)
 	router.Run(fmt.Sprintf(":%s", config.Instance.Port))
 }
