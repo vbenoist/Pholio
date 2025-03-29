@@ -24,7 +24,9 @@ type ApiConfig struct {
 }
 
 type FrontConfig struct {
-	Url string
+	Url  string
+	User string
+	Pass string
 }
 
 type FileManagerConfig struct {
@@ -38,7 +40,17 @@ type ServerConfig struct {
 	FileManager FileManagerConfig
 }
 
-func SetServerConfig() ServerConfig {
+var servConfig ServerConfig
+
+func GetServerConfig() ServerConfig {
+	if servConfig.Instance.Port == "" {
+		servConfig = initServerConfig()
+	}
+
+	return servConfig
+}
+
+func initServerConfig() ServerConfig {
 	viper.SetConfigName("server")
 	viper.SetConfigType("toml")
 	/* Normal runtime */
@@ -57,7 +69,9 @@ func SetServerConfig() ServerConfig {
 			Port: viper.GetString("api.listening_port"),
 		},
 		Front: FrontConfig{
-			Url: viper.GetString("front.url"),
+			Url:  viper.GetString("front.url"),
+			User: viper.GetString("front.user"),
+			Pass: viper.GetString("front.pass"),
 		},
 		Database: DatabaseConfig{
 			Type:       viper.GetString("database.type"),

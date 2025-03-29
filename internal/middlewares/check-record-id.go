@@ -3,7 +3,7 @@ package middlewares
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackidu14/pholio/internal/database/connector"
-	"github.com/jackidu14/pholio/internal/models"
+	databasemodels "github.com/jackidu14/pholio/internal/models/database"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -14,7 +14,7 @@ func CheckRecordId() gin.HandlerFunc {
 		objRecordId, _ := primitive.ObjectIDFromHex(recordId)
 		filter := bson.D{primitive.E{Key: "_id", Value: objRecordId}}
 
-		var result models.Record
+		var result databasemodels.Record
 		collection := connector.GetCollection("records")
 
 		err := collection.FindOne(c, filter).Decode(&result)

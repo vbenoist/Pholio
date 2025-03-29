@@ -11,7 +11,7 @@ import (
 )
 
 func GetFileFullpath(recordId string, fileType image.ResizeImageType) (string, error) {
-	config := cfg.SetServerConfig()
+	config := cfg.GetServerConfig()
 	folderPath := fmt.Sprintf("%s/%s/", config.FileManager.UploadPath, recordId)
 
 	folder, err := os.ReadDir(folderPath)

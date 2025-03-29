@@ -3,7 +3,8 @@ package image
 import (
 	"log"
 
-	"github.com/jackidu14/pholio/internal/models"
+	databasemodels "github.com/jackidu14/pholio/internal/models/database"
+
 	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
 	"github.com/jackidu14/pholio/pkg/helpers/image"
 
@@ -14,7 +15,7 @@ import (
 
 func ResizeImageThumb(recordId string, fullPath string) {
 	_, err := imagetracking.UpdateRecordImageTracking(recordId,
-		bson.D{primitive.E{Key: "ThumbConverting", Value: models.ISConverting}})
+		bson.D{primitive.E{Key: "ThumbConverting", Value: databasemodels.ISConverting}})
 
 	if err != nil {
 		logThumbDatabaseErr(err)
@@ -33,7 +34,7 @@ func ResizeImageThumb(recordId string, fullPath string) {
 	if err != nil {
 		log.Printf("helpers:image::ResizeImageThumb an error occured: %s", err.Error())
 		_, err = imagetracking.UpdateRecordImageTracking(recordId,
-			bson.D{primitive.E{Key: "ThumbConverting", Value: models.ISFailed}})
+			bson.D{primitive.E{Key: "ThumbConverting", Value: databasemodels.ISFailed}})
 
 		if err != nil {
 			logThumbDatabaseErr(err)
@@ -42,7 +43,7 @@ func ResizeImageThumb(recordId string, fullPath string) {
 	}
 
 	_, err = imagetracking.UpdateRecordImageTracking(recordId,
-		bson.D{primitive.E{Key: "ThumbConverting", Value: models.ISDone}})
+		bson.D{primitive.E{Key: "ThumbConverting", Value: databasemodels.ISDone}})
 
 	if err != nil {
 		logThumbDatabaseErr(err)

@@ -11,7 +11,7 @@ import (
 	"github.com/jackidu14/pholio/internal/database/connector"
 	"github.com/jackidu14/pholio/internal/helpers/cfg"
 	"github.com/jackidu14/pholio/internal/helpers/image"
-	"github.com/jackidu14/pholio/internal/models"
+	models "github.com/jackidu14/pholio/internal/models/database"
 	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
@@ -90,7 +90,7 @@ func prepareResizeImageTest() (string, string, error) {
 	}
 	defer exampleFile.Close()
 
-	config := cfg.SetServerConfig()
+	config := cfg.GetServerConfig()
 
 	/* Creating a copy of base example file, in future working dir */
 	fakeRcId := primitive.NewObjectID()

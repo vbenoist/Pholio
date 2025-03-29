@@ -3,7 +3,7 @@ package image
 import (
 	"log"
 
-	"github.com/jackidu14/pholio/internal/models"
+	databasemodels "github.com/jackidu14/pholio/internal/models/database"
 	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
 	"github.com/jackidu14/pholio/pkg/helpers/image"
 	"github.com/nfnt/resize"
@@ -13,7 +13,7 @@ import (
 
 func ResizeImageMid(recordId string, fullPath string) {
 	_, err := imagetracking.UpdateRecordImageTracking(recordId,
-		bson.D{primitive.E{Key: "MidConverting", Value: models.ISConverting}})
+		bson.D{primitive.E{Key: "MidConverting", Value: databasemodels.ISConverting}})
 
 	if err != nil {
 		logMidDatabaseErr(err)
@@ -32,7 +32,7 @@ func ResizeImageMid(recordId string, fullPath string) {
 	if err != nil {
 		log.Printf("helpers:image::ResizeImageMid an error occured: %s", err.Error())
 		_, err = imagetracking.UpdateRecordImageTracking(recordId,
-			bson.D{primitive.E{Key: "MidConverting", Value: models.ISFailed}})
+			bson.D{primitive.E{Key: "MidConverting", Value: databasemodels.ISFailed}})
 
 		if err != nil {
 			logMidDatabaseErr(err)
@@ -40,7 +40,7 @@ func ResizeImageMid(recordId string, fullPath string) {
 	}
 
 	_, err = imagetracking.UpdateRecordImageTracking(recordId,
-		bson.D{primitive.E{Key: "MidConverting", Value: models.ISDone}})
+		bson.D{primitive.E{Key: "MidConverting", Value: databasemodels.ISDone}})
 
 	if err != nil {
 		logMidDatabaseErr(err)

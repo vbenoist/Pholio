@@ -6,7 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackidu14/pholio/internal/database/connector"
-	"github.com/jackidu14/pholio/internal/models"
+	apimodels "github.com/jackidu14/pholio/internal/models/api"
+	databasemodels "github.com/jackidu14/pholio/internal/models/database"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -26,7 +27,7 @@ func GetRecentlyContent(c *gin.Context) {
 	defer cursor.Close(context.Background())
 
 	/* Extracting & unmarshall database collections */
-	var documents []models.Record
+	var documents []databasemodels.Record
 	err = cursor.All(context.Background(), &documents)
 
 	if err != nil {
@@ -51,7 +52,7 @@ func GetRecentlyContent(c *gin.Context) {
 	c.JSON(200, extractedRecords)
 }
 
-func extractRecentlyRecords(records []models.Record) (*models.RecentlyRecords, error) {
+func extractRecentlyRecords(records []databasemodels.Record) (*apimodels.RecentlyRecords, error) {
 	lastlyRecord, err := getLastlyRecord(records)
 
 	if err != nil {
@@ -62,7 +63,7 @@ func extractRecentlyRecords(records []models.Record) (*models.RecentlyRecords, e
 	dateDelimiter := lastlyRecord.Date.Time().AddDate(0, 0, -14) // 24 * 14
 
 	fmt.Printf("Date to delimit: %s\n", dateDelimiter)
-	var recentlyRecords models.RecentlyRecords
+	var recentlyRecords apimodels.RecentlyRecords
 
 	for _, rec := range records {
 		if rec.Date.Time().Before(dateDelimiter) {
@@ -77,7 +78,7 @@ func extractRecentlyRecords(records []models.Record) (*models.RecentlyRecords, e
 	return &recentlyRecords, nil
 }
 
-func getLastlyRecord(records []models.Record) (*models.Record, error) {
+func getLastlyRecord(records []databasemodels.Record) (*databasemodels.Record, error) {
 	if len(records) == 0 {
 		return nil, fmt.Errorf("getLastlyRecord: no records to walk in")
 	}

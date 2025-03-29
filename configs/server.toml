@@ -11,6 +11,8 @@ listening_port = "8081"
 
 [front]
 url = "http://localhost:5173"
+user = "admin"
+pass = "admin"
 
 [fileManager]
 upload_path = "/home/moi/uploads"

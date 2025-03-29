@@ -5,14 +5,14 @@ import (
 	"strings"
 
 	"github.com/jackidu14/pholio/internal/database/connector"
-	"github.com/jackidu14/pholio/internal/models"
+	databasemodels "github.com/jackidu14/pholio/internal/models/database"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func GetRecordImageTracking(recordId string) (models.RecordImageTracking, error) {
-	var result models.RecordImageTracking
+func GetRecordImageTracking(recordId string) (databasemodels.RecordImageTracking, error) {
+	var result databasemodels.RecordImageTracking
 	collection := connector.GetCollection("image-status")
 	rcid, _ := primitive.ObjectIDFromHex(recordId)
 
@@ -25,7 +25,7 @@ func AddRecordImageTracking(recordId string) (*mongo.InsertOneResult, error) {
 	collection := connector.GetCollection("image-status")
 	rcid, _ := primitive.ObjectIDFromHex(recordId)
 
-	imageTracking := models.RecordImageTracking{Id: primitive.NewObjectID(), RecordId: rcid}
+	imageTracking := databasemodels.RecordImageTracking{Id: primitive.NewObjectID(), RecordId: rcid}
 	return collection.InsertOne(context.TODO(), imageTracking)
 }
 

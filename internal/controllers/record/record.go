@@ -6,14 +6,14 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackidu14/pholio/internal/database/connector"
-	"github.com/jackidu14/pholio/internal/models"
+	apimodels "github.com/jackidu14/pholio/internal/models/api"
 	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func AddRecords(c *gin.Context) {
-	var records []models.DraftRecord
+	var records []apimodels.DraftRecord
 
 	err := c.BindJSON(&records)
 	if err != nil {
@@ -39,7 +39,7 @@ func AddRecords(c *gin.Context) {
 }
 
 func AddRecord(c *gin.Context) {
-	var record models.DraftRecord
+	var record apimodels.DraftRecord
 
 	err := c.BindJSON(&record)
 	if err != nil {
@@ -72,7 +72,7 @@ func AddRecord(c *gin.Context) {
 }
 
 func EditRecord(c *gin.Context) {
-	var record models.DraftRecord
+	var record apimodels.DraftRecord
 
 	err := c.BindJSON(&record)
 	if err != nil {

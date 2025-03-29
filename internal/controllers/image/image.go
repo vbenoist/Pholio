@@ -31,7 +31,7 @@ func AddImage(c *gin.Context) {
 
 	/* Building final path destination & writing file */
 	relatedRecordId := c.Param("id")
-	config := cfg.SetServerConfig()
+	config := cfg.GetServerConfig()
 	fullPath := fmt.Sprintf("%s/%s/original.%s", config.FileManager.UploadPath, relatedRecordId, fileType[1])
 
 	err = c.SaveUploadedFile(file, fullPath)

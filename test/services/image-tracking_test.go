@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/jackidu14/pholio/internal/database/connector"
-	"github.com/jackidu14/pholio/internal/models"
+	models "github.com/jackidu14/pholio/internal/models/database"
 	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"

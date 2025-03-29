@@ -9,24 +9,32 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var dbInst *mongo.Client
+
 func Connect() *mongo.Client {
-	config := cfg.SetServerConfig()
+	if dbInst != nil {
+		fmt.Println("MongoDB: Re-using socket")
+		return dbInst
+	}
+
+	config := cfg.GetServerConfig()
 	uri := fmt.Sprintf("mongodb://%s:%s@%s:%s", config.Database.Auth.Username, config.Database.Auth.Password, config.Database.Host, config.Database.Port)
-	fmt.Printf("Attempting to connect ... %s\n", uri)
 	clientOptions := options.Client().ApplyURI(uri)
 
-	dbclient, err := mongo.Connect(context.Background(), clientOptions)
+	var err error
+	fmt.Printf("MongoDB: Attempting to connect ... %s\n", uri)
+	dbInst, err = mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		panic(err)
 	}
 
-	err = dbclient.Ping(context.Background(), nil)
+	err = dbInst.Ping(context.Background(), nil)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Connected to MongoDB")
+	fmt.Println("MongoDB: Connected to MongoDB")
 
-	return dbclient
+	return dbInst
 }
 
 func GetCollection(name string) *mongo.Collection {
@@ -34,7 +42,7 @@ func GetCollection(name string) *mongo.Collection {
 }
 
 func GetDatabase() *mongo.Database {
-	config := cfg.SetServerConfig()
+	config := cfg.GetServerConfig()
 	pholioDatabase := client.Database(config.Database.Name)
 
 	if pholioDatabase == nil {

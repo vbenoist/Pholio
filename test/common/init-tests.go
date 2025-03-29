@@ -5,7 +5,7 @@ import (
 )
 
 func Init() {
-	// config := cfg.SetServerConfig()
+	// config := cfg.GetServerConfig()
 	connector.Connect()
 	defer connector.Disconnect()
 
