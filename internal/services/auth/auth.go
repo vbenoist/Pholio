@@ -10,6 +10,22 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+func GetAdminFromUid(userId string) (databasemodels.Admin, error) {
+	var registeredAdmin databasemodels.Admin
+	uObjId, err := primitive.ObjectIDFromHex(userId)
+	if err != nil {
+		return registeredAdmin, err
+	}
+
+	collection := connector.GetCollection("admin")
+	filter := bson.D{
+		primitive.E{Key: "_id", Value: uObjId},
+	}
+
+	err = collection.FindOne(context.TODO(), filter).Decode(&registeredAdmin)
+	return registeredAdmin, err
+}
+
 func GetAdminFromIds(username string, password string) (databasemodels.Admin, error) {
 	collection := connector.GetCollection("admin")
 	filter := bson.D{
