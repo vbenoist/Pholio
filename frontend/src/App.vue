@@ -10,12 +10,14 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import LayoutAdmin from '@/layouts/LayoutAdmin.vue'
+import LayoutDefault from '@/layouts/LayoutDefault.vue'
 import LayoutGuest from '@/layouts/LayoutGuest.vue'
 
 const route = useRoute()
 
 const layouts = {
   LayoutAdmin,
+  LayoutDefault,
   LayoutGuest
 }
 

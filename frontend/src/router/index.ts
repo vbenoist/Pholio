@@ -36,11 +36,20 @@ export const routes = [
     }
   },
   {
+    path: '/admin/login',
+    name: 'ADMIN-LOGIN',
+    component: () => import('@/views/Admin/LogIn.vue'),
+    meta: {
+      layout: 'default'
+    }
+  },
+  {
     path: '/admin/add',
-    name: 'ADMINADD',
+    name: 'ADMIN-ADD',
     component: () => import('@/views/Admin/AddImages.vue'),
     meta: {
-      layout: 'admin'
+      layout: 'admin',
+      auth: true
     }
   },
 ]

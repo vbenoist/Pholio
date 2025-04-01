@@ -1,8 +1,9 @@
 import type { App } from "vue"
 import axios from "axios"
 
-const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8081"
+export const axiosInstance = axios.create({
+  baseURL: "http://localhost:8081",
+  withCredentials: true
 })
 
 export default {
