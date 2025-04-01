@@ -1,3 +1,6 @@
+[env]
+production = "false"
+
 [database]
 type = "mongo"
 host = "127.0.0.1"

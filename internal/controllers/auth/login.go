@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/jackidu14/pholio/internal/helpers/cfg"
 	apimodels "github.com/jackidu14/pholio/internal/models/api"
 	"github.com/jackidu14/pholio/internal/services/auth"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -37,7 +38,7 @@ func Login(c *gin.Context) {
 
 	generateToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":  registeredAdmin.Id,
-		"exp": time.Now().Add(time.Hour * 2).Unix(),
+		"exp": time.Now().Add(time.Hour * 1).Unix(),
 	})
 
 	token, err := generateToken.SignedString([]byte(os.Getenv("SECRET")))
@@ -45,6 +46,10 @@ func Login(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to generate token"})
 	}
+
+	config := cfg.GetServerConfig()
+	secureCookie := config.Env.Production
+	c.SetCookie("auth_token", token, 3600, "/", "localhost", secureCookie, true)
 
 	c.JSON(200, gin.H{
 		"token": token,

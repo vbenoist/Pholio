@@ -6,6 +6,10 @@ import (
 	"github.com/spf13/viper"
 )
 
+type EnvConfig struct {
+	Production bool
+}
+
 type DatabaseAuth struct {
 	Username string
 	Password string
@@ -34,6 +38,7 @@ type FileManagerConfig struct {
 }
 
 type ServerConfig struct {
+	Env         EnvConfig
 	Instance    ApiConfig
 	Front       FrontConfig
 	Database    DatabaseConfig
@@ -65,6 +70,9 @@ func initServerConfig() ServerConfig {
 	}
 
 	return ServerConfig{
+		Env: EnvConfig{
+			Production: viper.GetBool("env.production"),
+		},
 		Instance: ApiConfig{
 			Port: viper.GetString("api.listening_port"),
 		},
