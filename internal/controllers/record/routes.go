@@ -18,6 +18,8 @@ func RegisterRoutes(router *gin.Engine) {
 		adminSafe.GET("/records/detailed", GetDetailedRecords)
 	}
 
+	router.GET("/content/records/recently", GetRecentlyContent)
+
 	// router.PUT("/content/records", EditRecords) // multi or single record edit ?
 	// router.DELETE("/content/records", RemoveRecords)
 }

@@ -1,23 +1,26 @@
-package recently
+package record
 
 import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackidu14/pholio/internal/helpers/controller"
 	apimodels "github.com/jackidu14/pholio/internal/models/api"
 	databasemodels "github.com/jackidu14/pholio/internal/models/database"
 	"github.com/jackidu14/pholio/internal/services/record"
 )
 
 func GetRecentlyContent(c *gin.Context) {
-	paginatedResult, err := record.GetRecords()
+	paginationParams := controller.GetPaginationParameters(c)
+	paginatedResult, err := record.GetRecords(paginationParams)
 	if err != nil {
 		c.JSON(500, gin.H{"error::database": "Error while reading database - unable to get recently records"})
 		return
 	}
 
-	for _, doc := range paginatedResult.Documents {
-		fmt.Printf("Date: %s\n", doc.Date.Time())
+	if len(paginatedResult.Documents) == 0 {
+		c.JSON(200, paginatedResult)
+		return
 	}
 
 	/* Formatting as expected */

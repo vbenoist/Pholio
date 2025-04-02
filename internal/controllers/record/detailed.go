@@ -6,12 +6,14 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jackidu14/pholio/internal/helpers/controller"
 	"github.com/jackidu14/pholio/internal/services/record"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func GetDetailedRecords(c *gin.Context) {
-	results, err := record.GetDetailedRecords()
+	paginationParams := controller.GetPaginationParameters(c)
+	results, err := record.GetDetailedRecords(paginationParams)
 	if err != nil {
 		fmt.Printf("record::GetDetailedRecords %s\n", err.Error())
 

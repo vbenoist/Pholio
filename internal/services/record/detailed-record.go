@@ -6,10 +6,10 @@ import (
 	imagehelper "github.com/jackidu14/pholio/pkg/helpers/image"
 )
 
-func GetDetailedRecords() (apimodels.PaginatedResults[apimodels.DetailedRecord], error) {
+func GetDetailedRecords(pgParams apimodels.PaginationQuery) (apimodels.PaginatedResults[apimodels.DetailedRecord], error) {
 	var results apimodels.PaginatedResults[apimodels.DetailedRecord]
 
-	paginatedResult, err := GetRecords()
+	paginatedResult, err := GetRecords(pgParams)
 	if err != nil {
 		return results, err
 	}
