@@ -6,24 +6,26 @@ import (
 	imagehelper "github.com/jackidu14/pholio/pkg/helpers/image"
 )
 
-func GetDetailedRecords() ([]apimodels.DetailedRecord, error) {
-	var results []apimodels.DetailedRecord
-	documents, err := GetRecords()
+func GetDetailedRecords() (apimodels.PaginatedResults[apimodels.DetailedRecord], error) {
+	var results apimodels.PaginatedResults[apimodels.DetailedRecord]
+
+	paginatedResult, err := GetRecords()
 	if err != nil {
 		return results, err
 	}
 
-	for i := 0; i < len(documents); i++ {
-		path, err := file.GetFileFullpath(documents[i].Id.Hex(), imagehelper.Orig)
+	for _, doc := range paginatedResult.Documents {
+		path, err := file.GetFileFullpath(doc.Id.Hex(), imagehelper.Orig)
 		if err != nil {
 			return results, err
 		}
 
-		results = append(results, apimodels.DetailedRecord{
-			Record: documents[i],
+		results.Documents = append(results.Documents, apimodels.DetailedRecord{
+			Record: doc,
 			Folder: path,
 		})
 	}
 
+	results.Pagination = paginatedResult.Pagination
 	return results, nil
 }

@@ -5,5 +5,5 @@ import (
 )
 
 func RegisterRoutes(router *gin.Engine) {
-	router.GET("/content/recently", GetRecentlyContent)
+	router.GET("/content/records/recently", GetRecentlyContent)
 }

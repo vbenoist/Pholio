@@ -10,18 +10,18 @@ import (
 )
 
 func GetRecentlyContent(c *gin.Context) {
-	documents, err := record.GetRecords()
+	paginatedResult, err := record.GetRecords()
 	if err != nil {
 		c.JSON(500, gin.H{"error::database": "Error while reading database - unable to get recently records"})
 		return
 	}
 
-	for _, doc := range documents {
+	for _, doc := range paginatedResult.Documents {
 		fmt.Printf("Date: %s\n", doc.Date.Time())
 	}
 
 	/* Formatting as expected */
-	extractedRecords, err := extractRecentlyRecords(documents)
+	extractedRecords, err := extractRecentlyRecords(paginatedResult.Documents)
 
 	if err != nil {
 		fmt.Printf("%s\n", err)
@@ -29,7 +29,11 @@ func GetRecentlyContent(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, extractedRecords)
+	results := apimodels.PaginatedResult[apimodels.RecentlyRecords]{
+		Pagination: paginatedResult.Pagination,
+		Document:   *extractedRecords,
+	}
+	c.JSON(200, results)
 }
 
 func extractRecentlyRecords(records []databasemodels.Record) (*apimodels.RecentlyRecords, error) {

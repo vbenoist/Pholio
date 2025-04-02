@@ -3,23 +3,25 @@ package record
 import (
 	"context"
 
+	mongopagination "github.com/gobeam/mongo-go-pagination"
 	"github.com/jackidu14/pholio/internal/database/connector"
+	apimodels "github.com/jackidu14/pholio/internal/models/api"
 	databasemodels "github.com/jackidu14/pholio/internal/models/database"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func GetRecords() ([]databasemodels.Record, error) {
-	// /* TODO : Add filter for max date */
-	// /* TODO : Add pagination */
+func GetRecords() (apimodels.PaginatedResults[databasemodels.Record], error) {
 	var documents []databasemodels.Record
+	var results apimodels.PaginatedResults[databasemodels.Record]
 	collection := connector.GetCollection("records")
 
-	cursor, err := collection.Find(context.Background(), bson.D{})
+	// paginatedData, err := mongopagination.New(collection).Context(context.Background()).Limit(10).Page(1).Find()
+	paginatedData, err := mongopagination.New(collection).Context(context.Background()).Filter(bson.D{}).Limit(10).Page(1).Decode(&documents).Find()
 	if err != nil {
-		return documents, err
+		return results, err
 	}
-	defer cursor.Close(context.Background())
 
-	err = cursor.All(context.Background(), &documents)
-	return documents, err
+	results.Pagination = paginatedData.Pagination
+	results.Documents = documents
+	return results, nil
 }

@@ -13,6 +13,8 @@ require (
 	go.mongodb.org/mongo-driver v1.17.3
 )
 
+require github.com/gobeam/mongo-go-pagination v0.0.8 // indirect
+
 require (
 	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
