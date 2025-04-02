@@ -12,6 +12,7 @@
           class="container__content__list__item"
           :src="apiPathBuilder.buildRecordThumbUrl(itm)"
           :alt="itm.description ?? itm.location"
+          loading="lazy"
         />
       </div>
     </div>

@@ -3,6 +3,7 @@
     <TileGroup title="Derniers ajouts" :items="items.lastly" />
     <TileGroup title="Plus anciennement" :items="items.lately" />
   </div>
+  <div v-else-if="hasFetched">Aucune photo n'est disponible.</div>
   <div v-else>Loading...</div>
 </template>
 
