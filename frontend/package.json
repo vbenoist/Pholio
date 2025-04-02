@@ -12,8 +12,25 @@
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --fix",
-    "format": "prettier --write src/"
+    "lint": "eslint . --color --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier src/",
+    "format:fix": "yarn format --write"
+  },
+  "lint-staged": {
+    "*.{ts, js, vue, scss}": [
+      "yarn format"
+    ],
+    "*.{ts, js, vue}": [
+      "yarn lint",
+      "yarn test"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
   },
   "dependencies": {
     "@vuelidate/core": "^2.0.3",

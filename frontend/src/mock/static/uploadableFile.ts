@@ -7,7 +7,7 @@ export const mockUplaodableFile = (length: number): Array<UploadableFile> => {
   const fData = fs.readFileSync('./src/mock/assets/midsize.jpeg')
   const file: File = new File(fData, 'midsize')
 
-  for(let i=0; i<length; i++) {
+  for (let i = 0; i < length; i++) {
     result.push(new UploadableFile(file))
   }
 

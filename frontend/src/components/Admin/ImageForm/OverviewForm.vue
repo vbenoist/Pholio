@@ -2,7 +2,10 @@
   <div>
     <ImagePreview v-if="records.length > 0" v-model="photos" orientation="vertical">
       <template #preview-extend="{ photo }">
-        <PhotoCard :modelValue="retreiveDraftRecord(photo)" @update:modelValue="onDraftRecordUpdate" />
+        <PhotoCard
+          :modelValue="retreiveDraftRecord(photo)"
+          @update:modelValue="onDraftRecordUpdate"
+        />
       </template>
     </ImagePreview>
   </div>
@@ -23,23 +26,20 @@ watch(photos, () => {
 })
 
 const retreiveDraftRecord = (photo: UploadableFile): DraftRecord => {
-  return records.value.find(df => df.file.id === photo.id) ?? new DraftRecord(photo)
+  return records.value.find((df) => df.file.id === photo.id) ?? new DraftRecord(photo)
 }
 
 const onDraftRecordUpdate = (draftRecord: DraftRecord) => {
-  const toUpdate = records.value.findIndex(df => df.draftId === draftRecord.draftId)
-  if(toUpdate === -1) return
+  const toUpdate = records.value.findIndex((df) => df.draftId === draftRecord.draftId)
+  if (toUpdate === -1) return
   records.value[toUpdate] = draftRecord
 }
 
 const updateRecords = () => {
-  records.value = toRaw(photos.value).map(p => new DraftRecord(p))
+  records.value = toRaw(photos.value).map((p) => new DraftRecord(p))
 }
 
 updateRecords()
-
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

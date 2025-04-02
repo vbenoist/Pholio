@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 import { inject, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { ApiResolver } from "@/plugins/apiResolver"
+import { ApiResolver } from '@/plugins/apiResolver'
 import type { ApiGetRecord } from '@/models/api/record'
 
 export type RecentlyContent = {

@@ -18,11 +18,11 @@ const route = useRoute()
 const layouts = {
   LayoutAdmin,
   LayoutDefault,
-  LayoutGuest
+  LayoutGuest,
 }
 
 const routeLayout = computed<keyof typeof layouts>(() => {
-  if(!route.meta.layout) return 'LayoutGuest'
+  if (!route.meta.layout) return 'LayoutGuest'
 
   const meta = String(route.meta.layout)
   const formatted = meta[0].toUpperCase() + meta.slice(1)

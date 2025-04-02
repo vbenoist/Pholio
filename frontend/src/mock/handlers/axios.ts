@@ -5,8 +5,8 @@ const mocks = vi.hoisted(() => ({
   post: vi.fn(),
 }))
 
-vi.mock('axios', async(importActual) => {
-  const actual = await importActual<typeof import ('axios')>();
+vi.mock('axios', async (importActual) => {
+  const actual = await importActual<typeof import('axios')>()
 
   const mockAxios = {
     default: {
@@ -17,7 +17,7 @@ vi.mock('axios', async(importActual) => {
         post: mocks.post,
       })),
     },
-  };
+  }
 
-  return mockAxios;
+  return mockAxios
 })

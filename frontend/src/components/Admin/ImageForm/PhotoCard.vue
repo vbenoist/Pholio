@@ -1,9 +1,6 @@
 <template>
   <div v-if="draftRecord" class="photo-card">
-    <form
-      class="photo-card__form"
-      @submit.prevent="handleSubmit"
-    >
+    <form class="photo-card__form" @submit.prevent="handleSubmit">
       <div class="photo-card__form__section photo-card__form__section__date">
         <label :for="`draftrecord-date-${draftRecord.draftId}`" @click="triggerCalendar()">
           Date: {{ humanFormattedDate(draftRecord.date) }}
@@ -40,7 +37,12 @@
       </div>
 
       <button class="photo-card__form__validate" type="submit" @click="triggerValidation">
-        <v-icon :name="submitIcon" :animation="submitAnimation" :hover="submitAnimationHover" scale="1.3" />
+        <v-icon
+          :name="submitIcon"
+          :animation="submitAnimation"
+          :hover="submitAnimationHover"
+          scale="1.3"
+        />
       </button>
     </form>
   </div>
@@ -61,7 +63,7 @@ const apiResolver = inject('$apiResolver') as ApiResolver
 const formRules = {
   description: { maxLengthValue: maxLength(100) },
   location: { required, minLengthValue: minLength(4), maxLengthValue: maxLength(50) },
-  date: { required }
+  date: { required },
 }
 
 const humanFormattedDate = (date: Date): string => {
@@ -78,12 +80,12 @@ const inputFormattedDate = (date: Date): string => {
 
 const inputDate = computed<string>({
   get() {
-    if(!draftRecord.value) return inputFormattedDate(new Date())
+    if (!draftRecord.value) return inputFormattedDate(new Date())
     return inputFormattedDate(draftRecord.value.date)
   },
   set(val: string) {
     draftRecord.value!.date = new Date(val)
-  }
+  },
 })
 
 const handleSubmit = async () => {
@@ -92,10 +94,10 @@ const handleSubmit = async () => {
   const apiFormattedRecord = draftRecordToApiRecord(draftRecord.value)
 
   /* If first attempt or previous attempted has failed on sending record data */
-  if(draftRecord.value.status === 'PENDING' || draftRecord.value.status === 'FAILED') {
+  if (draftRecord.value.status === 'PENDING' || draftRecord.value.status === 'FAILED') {
     const resId = await apiResolver.addRecord(apiFormattedRecord)
 
-    if(!resId) {
+    if (!resId) {
       draftRecord.value.status = 'FAILED'
       return
     } else {
@@ -109,8 +111,9 @@ const handleSubmit = async () => {
 }
 
 const saveLinkedImage = (): Promise<void> => {
-  return apiResolver.linkImageRecord(draftRecord.value.draftId, draftRecord.value.file)
-    .then(success => {
+  return apiResolver
+    .linkImageRecord(draftRecord.value.draftId, draftRecord.value.file)
+    .then((success) => {
       draftRecord.value.file.status = success ? 'SENT' : 'FAILED'
     })
 }
@@ -124,11 +127,11 @@ const triggerCalendar = () => {
 }
 
 const submitIcon = computed<string>(() => {
-  if(v$.value.$error) return 'md-error-outlined'
-  if(draftRecord.value.status === 'FAILED') return 'bi-cloud-slash-fill'
-  if(draftRecord.value.file.status === 'SENDING') return 'md-pending'
-  if(draftRecord.value.file.status === 'FAILED') return 'bi-cloud-slash-fill'
-  if(draftRecord.value.file.status === 'SENT') return 'bi-cloud-check-fill'
+  if (v$.value.$error) return 'md-error-outlined'
+  if (draftRecord.value.status === 'FAILED') return 'bi-cloud-slash-fill'
+  if (draftRecord.value.file.status === 'SENDING') return 'md-pending'
+  if (draftRecord.value.file.status === 'FAILED') return 'bi-cloud-slash-fill'
+  if (draftRecord.value.file.status === 'SENT') return 'bi-cloud-check-fill'
   return 'bi-cloud-arrow-up-fill'
 })
 
@@ -141,11 +144,9 @@ const submitAnimationHover = computed<boolean>(() => {
 })
 
 const v$ = useVuelidate(formRules, draftRecord)
-
 </script>
 
 <style scoped lang="scss">
-
 .photo-card {
   margin: 0 12px;
   display: flex;
@@ -158,7 +159,8 @@ const v$ = useVuelidate(formRules, draftRecord)
     display: flex;
     flex-flow: column nowrap;
 
-    input[type=text], textarea {
+    input[type='text'],
+    textarea {
       background-color: #585858;
       color: white;
       border: 1px #313131;
@@ -212,5 +214,4 @@ const v$ = useVuelidate(formRules, draftRecord)
     }
   }
 }
-
 </style>

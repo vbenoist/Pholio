@@ -1,15 +1,7 @@
 <template>
-  <dialog
-    ref="image-modal-dial"
-    class="image-modal"
-    @close="onCloseModal"
-  >
+  <dialog ref="image-modal-dial" class="image-modal" @close="onCloseModal">
     <div class="image-modal__container">
-      <img
-        v-if="photo"
-        class="image-modal__container__img"
-        :src="photo.url"
-      />
+      <img v-if="photo" class="image-modal__container__img" :src="photo.url" />
 
       <div class="image-modal__container__close" @click="manuallyCloseModal">
         <v-icon class="image-modal__container__close__icon" name="io-close" scale="1.6" />
@@ -20,7 +12,7 @@
 
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import { defineModel, useTemplateRef, watch } from 'vue'
+import { defineModel, useTemplateRef, watch } from 'vue'
 import type { UploadableFile } from '@/models/uploadableFile'
 
 const emit = defineEmits<{
@@ -31,7 +23,7 @@ const isModalOpen = defineModel<boolean>('is-open', { default: false })
 const photo = defineModel<UploadableFile | null>('photo', { default: null })
 
 const openModal = () => {
-  if(!dialogRef.value) return
+  if (!dialogRef.value) return
   dialogRef.value.showModal()
 }
 
@@ -41,15 +33,14 @@ const onCloseModal = () => {
 }
 
 const manuallyCloseModal = () => {
-  if(!dialogRef.value) return
+  if (!dialogRef.value) return
   dialogRef.value.close()
 }
 
 watch(isModalOpen, () => {
-  if(!dialogRef.value) return
-  if(isModalOpen.value && !dialogRef.value.open) openModal()
+  if (!dialogRef.value) return
+  if (isModalOpen.value && !dialogRef.value.open) openModal()
 })
-
 </script>
 
 <style scoped lang="scss">
@@ -58,10 +49,10 @@ dialog::backdrop {
 }
 
 dialog[open] {
-  animation: modalFadeIn .5s ease normal;
+  animation: modalFadeIn 0.5s ease normal;
 }
 
-@keyframes modalFadeIn{
+@keyframes modalFadeIn {
   from {
     opacity: 0;
   }

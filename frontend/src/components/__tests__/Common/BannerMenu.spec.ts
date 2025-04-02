@@ -1,13 +1,13 @@
 import { expect, test, vi } from 'vitest'
-import { flushPromises, mount } from "@vue/test-utils"
+import { flushPromises, mount } from '@vue/test-utils'
 import { createRouter, createWebHistory } from 'vue-router'
 import BannerMenu from '@/components/Common/BannerMenu.vue'
-import type { RoutesNames } from '@/router'
-import { routes } from "@/router"
+import type { RoutesNames } from '@/router'
+import { routes } from '@/router'
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
 test('checking menu list', async () => {
@@ -15,12 +15,11 @@ test('checking menu list', async () => {
 
   const wrapper = mount(BannerMenu, {})
 
-  expect(wrapper.text()).toContain("Récents")
-  expect(wrapper.text()).toContain("Par Date")
-  expect(wrapper.text()).toContain("Par Lieu")
-  expect(wrapper.text()).toContain("Mis en avant")
+  expect(wrapper.text()).toContain('Récents')
+  expect(wrapper.text()).toContain('Par Date')
+  expect(wrapper.text()).toContain('Par Lieu')
+  expect(wrapper.text()).toContain('Mis en avant')
 })
-
 
 test('checking menu nav actions', async () => {
   router.push('/')
@@ -29,8 +28,8 @@ test('checking menu nav actions', async () => {
 
   const wrapper = mount(BannerMenu, {
     global: {
-      plugins: [router]
-    }
+      plugins: [router],
+    },
   })
 
   const menus = wrapper.findAll('span')
@@ -38,7 +37,7 @@ test('checking menu nav actions', async () => {
 
   const navOrder: Array<RoutesNames> = ['RECENT', 'DATE', 'LOCATION', 'PINED']
 
-  for(let i=0; i<menus.length; i++) {
+  for (let i = 0; i < menus.length; i++) {
     await menus[i].trigger('click')
     await flushPromises()
     expect(wrapper.vm.$route.name).toEqual(navOrder[i])

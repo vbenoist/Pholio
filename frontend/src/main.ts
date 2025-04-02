@@ -3,7 +3,7 @@ import './assets/main.scss'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import { OhVueIcon, addIcons } from "oh-vue-icons"
+import { OhVueIcon, addIcons } from 'oh-vue-icons'
 import {
   BiCalendarDateFill,
   BiCloudArrowUpFill,
@@ -14,8 +14,8 @@ import {
   IoTrashBinSharp,
   MdErrorOutlined,
   MdPending,
-  RiLoader4Line
-} from "oh-vue-icons/icons"
+  RiLoader4Line,
+} from 'oh-vue-icons/icons'
 
 import App from './App.vue'
 import router from './router'
@@ -44,8 +44,8 @@ addIcons(
   IoTrashBinSharp,
   MdErrorOutlined,
   MdPending,
-  RiLoader4Line
+  RiLoader4Line,
 )
-app.component("v-icon", OhVueIcon)
+app.component('v-icon', OhVueIcon)
 
 app.mount('#app')

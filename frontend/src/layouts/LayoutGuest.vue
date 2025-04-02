@@ -12,10 +12,8 @@
 </template>
 
 <script setup lang="ts">
-
 import BannerHeader from '@/components/Common/BannerHeader.vue'
 import BannerMenu from '@/components/Common/BannerMenu.vue'
-
 </script>
 
 <style>

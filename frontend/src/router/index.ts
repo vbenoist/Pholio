@@ -6,42 +6,42 @@ export const routes = [
   {
     path: '/',
     name: 'RECENT',
-    component: () => import('@/views/Recently.vue'),
+    component: () => import('@/views/RecentlyRecords.vue'),
     meta: {
-      layout: 'guest'
-    }
+      layout: 'guest',
+    },
   },
   {
     path: '/per-date',
     name: 'DATE',
-    component: () => import('@/views/Recently.vue'),
+    component: () => import('@/views/RecentlyRecords.vue'),
     meta: {
-      layout: 'guest'
-    }
+      layout: 'guest',
+    },
   },
   {
     path: '/per-location',
     name: 'LOCATION',
-    component: () => import('@/views/Recently.vue'),
+    component: () => import('@/views/RecentlyRecords.vue'),
     meta: {
-      layout: 'guest'
-    }
+      layout: 'guest',
+    },
   },
   {
     path: '/pin',
     name: 'PINED',
-    component: () => import('@/views/Recently.vue'),
+    component: () => import('@/views/RecentlyRecords.vue'),
     meta: {
-      layout: 'guest'
-    }
+      layout: 'guest',
+    },
   },
   {
     path: '/admin/login',
     name: 'ADMIN-LOGIN',
     component: () => import('@/views/Admin/LogIn.vue'),
     meta: {
-      layout: 'default'
-    }
+      layout: 'default',
+    },
   },
   {
     path: '/admin/add',
@@ -49,14 +49,14 @@ export const routes = [
     component: () => import('@/views/Admin/AddImages.vue'),
     meta: {
       layout: 'admin',
-      auth: true
-    }
+      auth: true,
+    },
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
 })
 
 export default router

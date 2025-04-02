@@ -1,13 +1,13 @@
 <template>
-	<div
+  <div
     :data-active="active"
     @dragenter.prevent="setActive"
     @dragover.prevent="setActive"
     @dragleave.prevent="setInactive"
     @drop.prevent="onDrop"
   >
-		<slot :dropZoneActive="active"></slot>
-	</div>
+    <slot :dropZoneActive="active"></slot>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -24,46 +24,44 @@ let inActiveTimeout: number | undefined = undefined
 // the dragleave event that is fired won't cause a flicker. A few ms should be plenty of
 // time to wait for the next dragenter event to clear the timeout and set it back to active.
 const setActive = () => {
-	active.value = true
-	clearTimeout(inActiveTimeout)
+  active.value = true
+  clearTimeout(inActiveTimeout)
 }
 
 const setInactive = () => {
-	inActiveTimeout = setTimeout(() => {
-		active.value = false
-	}, 50)
+  inActiveTimeout = setTimeout(() => {
+    active.value = false
+  }, 50)
 }
 
 const onDrop = (e: DragEvent) => {
-	setInactive()
+  setInactive()
   const files = e.dataTransfer?.files
-  if(!files || files.length === 0) return
+  if (!files || files.length === 0) return
 
   const filesArr = convertFileListArray(files)
 
-  const filtered = filesArr.filter(f =>
-    f.type === "image/png" || f.type === "image/jpeg"
-  )
-  if(filtered.length === 0) return
+  const filtered = filesArr.filter((f) => f.type === 'image/png' || f.type === 'image/jpeg')
+  if (filtered.length === 0) return
 
   emit('files-dropped', filtered)
 }
 
 const preventDefaults = (e: Event) => {
-	e.preventDefault()
+  e.preventDefault()
 }
 
 const events = ['dragenter', 'dragover', 'dragleave', 'drop']
 
 onMounted(() => {
-	events.forEach((eventName) => {
-		document.body.addEventListener(eventName, preventDefaults)
-	})
+  events.forEach((eventName) => {
+    document.body.addEventListener(eventName, preventDefaults)
+  })
 })
 
 onUnmounted(() => {
-	events.forEach((eventName) => {
-		document.body.removeEventListener(eventName, preventDefaults)
-	})
+  events.forEach((eventName) => {
+    document.body.removeEventListener(eventName, preventDefaults)
+  })
 })
 </script>

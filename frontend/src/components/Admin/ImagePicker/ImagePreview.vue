@@ -8,10 +8,7 @@
       <div class="preview__container">
         <img class="preview__container__img" :src="photo.url" />
         <div class="preview__container__overlay">
-          <div
-            class="preview__container__overlay__actions"
-            @click="displayFullsize(photo)"
-          >
+          <div class="preview__container__overlay__actions" @click="displayFullsize(photo)">
             <v-icon name="co-fullscreen" scale="1.3" />
             <v-icon name="io-trash-bin-sharp" scale="1.3" @click.stop="removePhoto(photo)" />
           </div>
@@ -21,24 +18,18 @@
       <slot name="preview-extend" :photo="photo"></slot>
     </div>
 
-    <ImageModal
-      v-model:is-open="isModalOpen"
-      v-model:photo="selectedPhoto"
-      @close="onCloseModal"
-    />
+    <ImageModal v-model:is-open="isModalOpen" v-model:photo="selectedPhoto" @close="onCloseModal" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineModel, defineProps, ref } from 'vue'
 import type { UploadableFile } from '@/models/uploadableFile'
-import ImageModal from "@/components/Admin/ImagePicker/ImageModal.vue"
+import ImageModal from '@/components/Admin/ImagePicker/ImageModal.vue'
 
 type OrientationType = 'horizontal' | 'vertical'
 
-const {
-  orientation = 'horizontal'
-} = defineProps<{
+const { orientation = 'horizontal' } = defineProps<{
   orientation?: OrientationType
 }>()
 const photos = defineModel<Array<UploadableFile>>()
@@ -46,23 +37,22 @@ const isModalOpen = ref<boolean>(false)
 const selectedPhoto = ref<UploadableFile | null>(null)
 
 const displayFullsize = (photo: UploadableFile) => {
-  console.log("displayFullsize", photo)
+  console.log('displayFullsize', photo)
   isModalOpen.value = true
   selectedPhoto.value = photo
 }
 
 const removePhoto = (photo: UploadableFile) => {
-  console.log("removePhoto", photo)
-  const idx = photos.value?.findIndex(p => p.id === photo.id) ?? -1
+  console.log('removePhoto', photo)
+  const idx = photos.value?.findIndex((p) => p.id === photo.id) ?? -1
 
-  if(idx === -1) return
+  if (idx === -1) return
   photos.value?.splice(idx, 1)
 }
 
 const onCloseModal = () => {
   selectedPhoto.value = null
 }
-
 </script>
 
 <style scopped lang="scss">
@@ -122,7 +112,7 @@ $blur-bg: rgba(0, 0, 0, 0.4);
     &__img {
       max-width: 250px;
       max-height: 125px;
-      transition: .3s all;
+      transition: 0.3s all;
       border-radius: 3px;
     }
 
@@ -135,7 +125,7 @@ $blur-bg: rgba(0, 0, 0, 0.4);
       background: $blur-bg;
       color: #fff;
       opacity: 0;
-      transition: .3s all;
+      transition: 0.3s all;
       border-radius: 3px;
       cursor: pointer;
 

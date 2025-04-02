@@ -6,10 +6,10 @@ export class UploadableFile {
   url: string
   status: UploadableFileStatus
 
-	constructor(file: File) {
-		this.file = file
-		this.id = `${file.name}-${file.size}-${file.lastModified}-${file.type}`
-		this.url = URL.createObjectURL(file)
-		this.status = 'PENDING'
-	}
+  constructor(file: File) {
+    this.file = file
+    this.id = `${file.name}-${file.size}-${file.lastModified}-${file.type}`
+    this.url = URL.createObjectURL(file)
+    this.status = 'PENDING'
+  }
 }

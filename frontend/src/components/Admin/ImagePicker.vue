@@ -1,23 +1,23 @@
 <template>
-	<div class="main-drop">
-		<DropZone
+  <div class="main-drop">
+    <DropZone
       class="main-drop__area"
       @files-dropped="addFiles"
       @click="triggerInput"
       #default="{ dropZoneActive }"
     >
-			<label class="main-drop__area__label" for="photo-drop-input">
-				<span v-if="dropZoneActive">
-					<span>Glissez-déposez vos photos ici</span>
-					<span class="smaller">pour les ajouter</span>
-				</span>
-				<span v-else class="main-drop__area__label__container">
-					<span>Glissez-déposez vos photos ici</span>
-					<span class="smaller">
-						ou <strong><em>cliquer ici</em></strong> pour choisir vos photos
-					</span>
-				</span>
-			</label>
+      <label class="main-drop__area__label" for="photo-drop-input">
+        <span v-if="dropZoneActive">
+          <span>Glissez-déposez vos photos ici</span>
+          <span class="smaller">pour les ajouter</span>
+        </span>
+        <span v-else class="main-drop__area__label__container">
+          <span>Glissez-déposez vos photos ici</span>
+          <span class="smaller">
+            ou <strong><em>cliquer ici</em></strong> pour choisir vos photos
+          </span>
+        </span>
+      </label>
       <input
         class="main-drop__area__input"
         type="file"
@@ -28,8 +28,8 @@
         @click.stop
         @change="onInputChange"
       />
-		</DropZone>
-	</div>
+    </DropZone>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -40,17 +40,14 @@ import type { UploadableFile } from '@/models/uploadableFile'
 
 const filesModel = defineModel<Array<UploadableFile>>()
 const photoInput = useTemplateRef<HTMLInputElement>('photo-drop-input')
-const {
-  addMergeFiles,
-  convertFileListArray
-} = fileManager()
+const { addMergeFiles, convertFileListArray } = fileManager()
 
 const onInputChange = (e: Event) => {
   if (!e.target || !(e.target instanceof HTMLInputElement)) return
-  if(!e.target.files) return
+  if (!e.target.files) return
 
   filesModel.value = addMergeFiles(convertFileListArray(e.target.files))
-	e.target.value = ''
+  e.target.value = ''
 }
 
 const addFiles = (e: Array<File>) => {
@@ -58,7 +55,7 @@ const addFiles = (e: Array<File>) => {
 }
 
 const triggerInput = () => {
-  if(!photoInput.value) return
+  if (!photoInput.value) return
   photoInput.value?.click()
 }
 </script>

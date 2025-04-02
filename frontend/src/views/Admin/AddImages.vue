@@ -7,12 +7,7 @@
       </div>
 
       <div class="next-step">
-        <button
-          v-if="photos.length > 0"
-          @click="goToNextStep"
-        >
-          Etape suivante >
-        </button>
+        <button v-if="photos.length > 0" @click="goToNextStep">Etape suivante ></button>
       </div>
     </div>
 
@@ -27,9 +22,9 @@
 <script setup lang="ts">
 import type { UploadableFile } from '@/models/uploadableFile'
 import { ref } from 'vue'
-import ImagePicker from "@/components/Admin/ImagePicker.vue"
-import ImagePreview from "@/components/Admin/ImagePicker/ImagePreview.vue"
-import OverviewForm from "@/components/Admin/ImageForm/OverviewForm.vue"
+import ImagePicker from '@/components/Admin/ImagePicker.vue'
+import ImagePreview from '@/components/Admin/ImagePicker/ImagePreview.vue'
+import OverviewForm from '@/components/Admin/ImageForm/OverviewForm.vue'
 
 const photos = ref<Array<UploadableFile>>([])
 const step = ref<number>(0)
@@ -37,11 +32,9 @@ const step = ref<number>(0)
 const goToNextStep = () => {
   step.value++
 }
-
 </script>
 
 <style scoped lang="scss">
-
 .image__preview {
   margin: auto;
   width: 80vw;
@@ -65,5 +58,4 @@ const goToNextStep = () => {
     padding: 10px;
   }
 }
-
 </style>

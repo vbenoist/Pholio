@@ -1,13 +1,13 @@
 import { ref } from 'vue'
 import { expect, test, vi } from 'vitest'
-import { mount } from "@vue/test-utils"
+import { mount } from '@vue/test-utils'
 import axios from 'axios'
 import PhotoCard from '@/components/Admin/ImageForm/PhotoCard.vue'
 import { ApiResolver } from '@/plugins/apiResolver'
-import { mockDraftRecords } from "@/mock/static/records"
+import { mockDraftRecords } from '@/mock/static/records'
 import type { DraftRecord } from '@/models/record'
 
-global.URL.createObjectURL = vi.fn(() => 'details');
+global.URL.createObjectURL = vi.fn(() => 'details')
 const apiResolver = new ApiResolver(axios)
 const draftRecord = ref<DraftRecord>(mockDraftRecords(1)[0])
 
@@ -15,13 +15,13 @@ const draftRecord = ref<DraftRecord>(mockDraftRecords(1)[0])
 test('should not mount', async () => {
   const wrapper = mount(PhotoCard, {
     props: {
-      draftRecord: null
+      draftRecord: null,
     },
     global: {
       provide: {
-        '$apiResolver': apiResolver
-      }
-    }
+        $apiResolver: apiResolver,
+      },
+    },
   })
 
   expect(wrapper.find('form').exists()).toBe(false)
@@ -32,13 +32,13 @@ test('should mount', async () => {
   const wrapper = mount(PhotoCard, {
     props: {
       modelValue: draftRecord.value,
-      'onUpdate:modelValue': (e) => wrapper.setProps({ modelValue: e })
+      'onUpdate:modelValue': (e) => wrapper.setProps({ modelValue: e }),
     },
     global: {
       provide: {
-        '$apiResolver': apiResolver
-      }
-    }
+        $apiResolver: apiResolver,
+      },
+    },
   })
 
   expect(wrapper.find('form').exists()).toBe(true)
@@ -48,13 +48,13 @@ test('input content tests', async () => {
   const wrapper = mount(PhotoCard, {
     props: {
       modelValue: draftRecord.value,
-      'onUpdate:modelValue': (e) => wrapper.setProps({ modelValue: e })
+      'onUpdate:modelValue': (e) => wrapper.setProps({ modelValue: e }),
     },
     global: {
       provide: {
-        '$apiResolver': apiResolver
-      }
-    }
+        $apiResolver: apiResolver,
+      },
+    },
   })
 
   const inputs = wrapper.findAll('input')
@@ -68,13 +68,13 @@ test('input validation tests', async () => {
   const wrapper = mount(PhotoCard, {
     props: {
       modelValue: draftRecord.value,
-      'onUpdate:modelValue': (e) => wrapper.setProps({ modelValue: e })
+      'onUpdate:modelValue': (e) => wrapper.setProps({ modelValue: e }),
     },
     global: {
       provide: {
-        '$apiResolver': apiResolver
-      }
-    }
+        $apiResolver: apiResolver,
+      },
+    },
   })
 
   expect(wrapper.vm.submitIcon).toEqual('bi-cloud-arrow-up-fill')
@@ -83,6 +83,6 @@ test('input validation tests', async () => {
   expect(wrapper.vm.submitIcon).toEqual('md-error-outlined')
 
   const inputs = wrapper.findAll('input')
-  await inputs[1].setValue("Les Rochilles")
+  await inputs[1].setValue('Les Rochilles')
   expect(wrapper.vm.submitIcon).toEqual('bi-cloud-arrow-up-fill')
 })

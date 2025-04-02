@@ -30,7 +30,6 @@ const props = defineProps({
   title: String,
   items: Array<ApiGetRecord>,
 })
-
 </script>
 
 <style lang="scss" scoped>

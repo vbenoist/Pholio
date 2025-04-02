@@ -1,4 +1,4 @@
-import type { App } from "vue"
+import type { App } from 'vue'
 import type { AxiosInstance } from 'axios'
 import type { ApiGetRecord } from '@/models/api/record'
 
@@ -19,5 +19,5 @@ export default {
     const apiPathBuilder = new ApiPathBuilder(app.config.globalProperties.$axios)
     app.config.globalProperties.$apiPathBuilder = apiPathBuilder
     app.provide('$apiPathBuilder', apiPathBuilder)
-  }
+  },
 }

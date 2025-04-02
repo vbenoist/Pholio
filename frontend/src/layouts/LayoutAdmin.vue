@@ -78,6 +78,4 @@
     color: #ffffff;
   }
 }
-
-
 </style>

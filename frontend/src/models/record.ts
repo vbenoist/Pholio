@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import type { UploadableFile } from "./uploadableFile"
+import type { UploadableFile } from './uploadableFile'
 
 export type DraftRecordStatus = 'PENDING' | 'FAILED' | 'SENT'
 

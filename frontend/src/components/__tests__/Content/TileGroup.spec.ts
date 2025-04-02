@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
-import { mount } from "@vue/test-utils"
+import { mount } from '@vue/test-utils'
 import TileGroup from '@/components/Content/TileGroup.vue'
-import { mockRecords } from "@/mock/static/records"
+import { mockRecords } from '@/mock/static/records'
 
 test('mount & renders title correctly', async () => {
   expect(TileGroup).toBeTruthy()
@@ -9,11 +9,11 @@ test('mount & renders title correctly', async () => {
   const wrapper = mount(TileGroup, {
     props: {
       title: 'Derniers ajouts',
-      items: []
-    }
+      items: [],
+    },
   })
 
-  expect(wrapper.text()).toContain("Derniers ajouts")
+  expect(wrapper.text()).toContain('Derniers ajouts')
 })
 
 test('renders images', async () => {
@@ -23,13 +23,13 @@ test('renders images', async () => {
   const wrapper = mount(TileGroup, {
     props: {
       title: 'Derniers ajouts',
-      items: mockData
-    }
+      items: mockData,
+    },
   })
 
   const imgs = wrapper.findAll('img')
 
-  for(let i=0; i<mockData.length; i++) {
+  for (let i = 0; i < mockData.length; i++) {
     expect(imgs[i].attributes('alt')).toEqual(mockData[i].description)
   }
 
