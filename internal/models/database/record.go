@@ -7,4 +7,5 @@ type Record struct {
 	Description string             `json:"description"`
 	Location    string             `json:"location"`
 	Date        primitive.DateTime `json:"date"`
+	Filename    string             `json:"filename"`
 }

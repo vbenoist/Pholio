@@ -6,14 +6,16 @@ import (
 )
 
 func RegisterRoutes(router *gin.Engine) {
-	recordSafe := router.Group("/content")
-	recordSafe.Use(middlewares.CheckAdmin())
+	adminSafe := router.Group("/content")
+	adminSafe.Use(middlewares.CheckAdmin())
 	{
-		recordSafe.POST("/record", AddRecord)
-		recordSafe.POST("/records", AddRecords)
+		adminSafe.POST("/record", AddRecord)
+		adminSafe.POST("/records", AddRecords)
 
-		recordSafe.PUT("/record/:id", EditRecord)
-		recordSafe.DELETE("/record/:id", RemoveRecord)
+		adminSafe.PUT("/record/:id", EditRecord)
+		adminSafe.DELETE("/record/:id", RemoveRecord)
+
+		adminSafe.GET("/records/detailed", GetDetailedRecords)
 	}
 
 	// router.PUT("/content/records", EditRecords) // multi or single record edit ?

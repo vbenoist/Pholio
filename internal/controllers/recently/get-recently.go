@@ -1,38 +1,18 @@
 package recently
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackidu14/pholio/internal/database/connector"
 	apimodels "github.com/jackidu14/pholio/internal/models/api"
 	databasemodels "github.com/jackidu14/pholio/internal/models/database"
-	"go.mongodb.org/mongo-driver/bson"
+	"github.com/jackidu14/pholio/internal/services/record"
 )
 
 func GetRecentlyContent(c *gin.Context) {
-	/* Connecting to recently collection */
-	collection := connector.GetCollection("records")
-	/* Getting collections. bson.D{} stands for "no filter" */
-	/* TODO : Add filter for max date */
-	/* TODO : Add pagination */
-	cursor, err := collection.Find(context.Background(), bson.D{})
-
+	documents, err := record.GetRecords()
 	if err != nil {
-		fmt.Printf("%s\n", err)
 		c.JSON(500, gin.H{"error::database": "Error while reading database - unable to get recently records"})
-		return
-	}
-	defer cursor.Close(context.Background())
-
-	/* Extracting & unmarshall database collections */
-	var documents []databasemodels.Record
-	err = cursor.All(context.Background(), &documents)
-
-	if err != nil {
-		fmt.Printf("%s\n", err)
-		c.JSON(500, gin.H{"error::database": "Error while reading database - unable to extract recently records"})
 		return
 	}
 
