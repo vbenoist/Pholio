@@ -19,6 +19,8 @@ func RegisterRoutes(router *gin.Engine) {
 	}
 
 	router.GET("/content/records/recently", GetRecentlyContent)
+	router.GET("/content/records/per-date", GetRecordsPerDate)
+	router.GET("/content/records/per-location", GetRecordsPerLocation)
 
 	// router.PUT("/content/records", EditRecords) // multi or single record edit ?
 	// router.DELETE("/content/records", RemoveRecords)

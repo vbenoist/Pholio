@@ -12,6 +12,9 @@ import (
 
 func GetRecentlyContent(c *gin.Context) {
 	paginationParams := controller.GetPaginationParameters(c)
+	paginationParams.SortBy = "date"
+	paginationParams.SortAsc = -1
+
 	paginatedResult, err := record.GetRecords(paginationParams)
 	if err != nil {
 		c.JSON(500, gin.H{"error::database": "Error while reading database - unable to get recently records"})

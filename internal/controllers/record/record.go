@@ -12,7 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func AddRecords(c *gin.Context) {
+func AddRecords(c *gin.Context) { // move to service
 	var records []apimodels.DraftRecord
 
 	err := c.BindJSON(&records)
