@@ -47,6 +47,8 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "failed to generate token"})
 	}
 
+	c.SetSameSite(http.SameSiteStrictMode)
+
 	config := cfg.GetServerConfig()
 	secureCookie := config.Env.Production
 	c.SetCookie("auth_token", token, 3600, "/", "localhost", secureCookie, true)
