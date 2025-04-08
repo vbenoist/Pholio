@@ -1,9 +1,10 @@
 import type { App } from 'vue'
 import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
-import type { PaginatedResult } from '@/models/api/paginated'
+import type { PaginatedResult, PaginatedResults } from '@/models/api/paginated'
 import type { RecentlyContent } from '@/stores/recentlyContent'
 import type { ApiAddRecord } from '@/models/api/record'
 import type { UploadableFile } from '@/models/uploadableFile'
+import type { GroupbyRecord } from '@/models/api/groupby-record'
 
 export class ApiResolver {
   readonly axios: AxiosInstance
@@ -15,6 +16,18 @@ export class ApiResolver {
   fetchRecently = async (): Promise<PaginatedResult<RecentlyContent> | null> => {
     return this.axios
       .get('/content/records/recently')
+      .then((res: AxiosResponse) => {
+        return res.data
+      })
+      .catch((e: AxiosError) => {
+        console.log(e)
+        return null
+      })
+  }
+
+  fetchPerDate = async (): Promise<PaginatedResults<GroupbyRecord> | null> => {
+    return this.axios
+      .get('/content/records/per-date')
       .then((res: AxiosResponse) => {
         return res.data
       })

@@ -14,7 +14,7 @@ export const routes = [
   {
     path: '/per-date',
     name: 'DATE',
-    component: () => import('@/views/RecentlyRecords.vue'),
+    component: () => import('@/views/PerDateRecords.vue'),
     meta: {
       layout: 'guest',
     },
