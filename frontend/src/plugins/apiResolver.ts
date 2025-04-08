@@ -37,6 +37,18 @@ export class ApiResolver {
       })
   }
 
+  fetchPerLocation = async (): Promise<PaginatedResults<GroupbyRecord> | null> => {
+    return this.axios
+      .get('/content/records/per-location')
+      .then((res: AxiosResponse) => {
+        return res.data
+      })
+      .catch((e: AxiosError) => {
+        console.log(e)
+        return null
+      })
+  }
+
   addRecord = async (record: ApiAddRecord): Promise<string | null> => {
     return this.axios
       .post('/content/record', record)

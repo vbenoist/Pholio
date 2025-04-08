@@ -22,7 +22,7 @@ export const routes = [
   {
     path: '/per-location',
     name: 'LOCATION',
-    component: () => import('@/views/RecentlyRecords.vue'),
+    component: () => import('@/views/PerLocationRecords.vue'),
     meta: {
       layout: 'guest',
     },
