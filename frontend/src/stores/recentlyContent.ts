@@ -15,7 +15,8 @@ export const useRecentlyContentStore = defineStore('recentlyContent', () => {
   const apiResolver = inject('$apiResolver') as ApiResolver
 
   async function initContent() {
-    content = await apiResolver.fetchRecently()
+    const res = await apiResolver.fetchRecently()
+    content = res?.document ?? null
     fetched.value = true
   }
 

@@ -1,5 +1,6 @@
 import type { App } from 'vue'
 import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
+import type { PaginatedResult } from '@/models/api/paginated'
 import type { RecentlyContent } from '@/stores/recentlyContent'
 import type { ApiAddRecord } from '@/models/api/record'
 import type { UploadableFile } from '@/models/uploadableFile'
@@ -11,9 +12,9 @@ export class ApiResolver {
     this.axios = axiosInst
   }
 
-  fetchRecently = async (): Promise<RecentlyContent | null> => {
+  fetchRecently = async (): Promise<PaginatedResult<RecentlyContent> | null> => {
     return this.axios
-      .get('/content/recently')
+      .get('/content/records/recently')
       .then((res: AxiosResponse) => {
         return res.data
       })
