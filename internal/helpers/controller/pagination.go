@@ -12,8 +12,11 @@ func GetPaginationParameters(c *gin.Context) apimodels.PaginationQuery {
 	if err != nil {
 		page = 1
 	}
+	if page < 1 {
+		page = 1
+	}
 
-	perPage, err := strconv.ParseInt(c.DefaultQuery("perpage", "10"), 10, 64)
+	perPage, err := strconv.ParseInt(c.DefaultQuery("perPage", "10"), 10, 64)
 	if err != nil {
 		perPage = 10
 	}

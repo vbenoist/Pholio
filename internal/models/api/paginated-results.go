@@ -1,6 +1,6 @@
 package apimodels
 
-import mongopagination "github.com/gobeam/mongo-go-pagination"
+import mongopagination "github.com/jackidu14/pholio/pkg/helpers/database"
 
 type PaginatedResult[T any] struct {
 	Pagination mongopagination.PaginationData `json:"pagination"`

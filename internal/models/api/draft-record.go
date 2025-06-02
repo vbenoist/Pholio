@@ -6,5 +6,4 @@ type DraftRecord struct {
 	Description string             `json:"description" binding:"max=100"`
 	Location    string             `json:"location" binding:"required,min=4,max=50"`
 	Date        primitive.DateTime `json:"date" binding:"required"`
-	Filename    string             `json:"filename" binding:"required"`
 }
