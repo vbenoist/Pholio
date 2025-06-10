@@ -26,7 +26,7 @@ export default <T>(apiResolverClbk: ApiResolverCallable, content: Ref<T[]>) => {
     return content
   }
 
-  const fetchNextContent = async() => {
+  const fetchNextContent = async () => {
     if(reachedEnd.value) {
       return
     }
@@ -60,6 +60,7 @@ export default <T>(apiResolverClbk: ApiResolverCallable, content: Ref<T[]>) => {
     fetchContent,
     fetchNextContent,
     getContent,
-    initContent
+    initContent,
+    reachedEnd
   }
 }
