@@ -75,3 +75,4 @@ export const useRecentlyContentStore = defineStore('recentlyContent', () => {
     getContent,
     initContent
   }
+})
