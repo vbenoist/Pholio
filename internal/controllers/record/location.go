@@ -10,8 +10,9 @@ import (
 
 func GetRecordsPerLocation(c *gin.Context) {
 	paginationParams := controller.GetPaginationParameters(c)
-	paginationParams.SortBy = "date"
-	paginationParams.SortAsc = -1
+	paginationParams.SortBy = "location"
+	paginationParams.SortAsc = 1
+	paginationParams.SortAscGroup = 1
 
 	paginatedResult, err := record.GetRecordsGroupByLocation(paginationParams)
 	if err != nil {

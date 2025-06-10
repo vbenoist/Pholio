@@ -81,17 +81,11 @@ func extractRecentlyRecords(records []databasemodels.Record, referenceRecord dat
 func GetRecordsGroupByDate(pgParams apimodels.PaginationQuery) (*apimodels.PaginatedResults[apimodels.GroupbyRecord], error) {
 	var results apimodels.PaginatedResults[apimodels.GroupbyRecord]
 
-	if pgParams.SortBy == "" || pgParams.SortBy == "date" {
-		pgParams.SortBy = "_id"
+	if pgParams.SortBy == "" {
+		pgParams.SortBy = "date"
 	}
 	preparedQuery := getBasePreparedQuery(pgParams)
 	aggPaginatedData, err := (*preparedQuery).Aggregate(
-		bson.M{
-			"$sort": bson.M{pgParams.SortBy: pgParams.SortAsc},
-		},
-		bson.M{
-			"$limit": pgParams.PerPage,
-		},
 		bson.M{
 			"$group": bson.M{
 				"_id": bson.M{"date": bson.M{"$dateTrunc": bson.M{
@@ -132,8 +126,8 @@ func GetRecordsGroupByDateDebug(pgParams apimodels.PaginationQuery) (*apimodels.
 	var results apimodels.PaginatedResults[apimodels.GroupbyRecord]
 
 	collection := connector.GetCollection("records")
-	if pgParams.SortBy == "" || pgParams.SortBy == "date" {
-		pgParams.SortBy = "_id"
+	if pgParams.SortBy == "" {
+		pgParams.SortBy = "date"
 	}
 
 	// cursor, err := collection.Aggregate(context.Background(), []bson.M{
@@ -155,33 +149,166 @@ func GetRecordsGroupByDateDebug(pgParams apimodels.PaginationQuery) (*apimodels.
 	// 	},
 	// })
 
+	fmt.Printf("Skip: %d\n", pgParams.PerPage*(pgParams.Page-1))
 	cursor, err := collection.Aggregate(context.Background(), []bson.M{
+		// {"$sort": bson.M{"_id": 1}},
+		// {"$skip": pgParams.PerPage * (pgParams.Page - 1)},
+		// {"$limit": pgParams.PerPage},
+		// {
+		// 	"$group": bson.M{
+		// 		"_id": bson.M{"date": bson.M{"$dateTrunc": bson.M{
+		// 			"date": "$date",
+		// 			"unit": "day",
+		// 		}}},
+		// 		"lines": bson.M{"$push": "$$ROOT"},
+		// 		"total": bson.M{"$sum": 1},
+		// 	},
+		// },
+
+		// bson.D{
+		// {
+		// 	Key: "$facet", Value: bson.M{
+		// 		"data": bson.D{
+		// 			/* Sorting, skip & limit on ungroupped lines, before applying groupBy */
+		// 			{Key: "$sort", Value: bson.M{"date": pgParams.SortAsc}},
+		// 			{Key: "$skip", Value: pgParams.PerPage * (pgParams.Page - 1)},
+		// 			{Key: "$limit", Value: pgParams.PerPage},
+		// 			/* Applying groupBy */
+		// 			{
+		// 				Key: "$group", Value: bson.M{
+		// 					"_id": bson.M{"date": bson.M{"$dateTrunc": bson.M{
+		// 						"date": "$date",
+		// 						"unit": "day",
+		// 					}}},
+		// 					"lines": bson.M{"$push": "$$ROOT"},
+		// 					"total": bson.M{"$sum": 1},
+		// 				},
+		// 			},
+		// 			/* Sorting the groupped output */
+		// 			{Key: "$sort", Value: bson.M{"_id": pgParams.SortAsc}},
+		// 		},
+		// 		"total": []bson.M{{"$count": "count"}}, // In the facet, outside limit scope to count every db lines
+		// 	},
+		// },
+
 		{
 			"$facet": bson.M{
 				"data": []bson.M{
-					{"$sort": bson.M{"_id": 1}},
+					/* Sorting, skip & limit on ungroupped lines, before applying groupBy */
+					{"$sort": bson.M{"date": pgParams.SortAsc}},
+					{"$skip": pgParams.PerPage * (pgParams.Page - 1)},
 					{"$limit": pgParams.PerPage},
+					/* Applying groupBy */
+					{
+						"$group": bson.M{
+							"_id": bson.M{"date": bson.M{"$dateTrunc": bson.M{
+								"date": "$date",
+								"unit": "day",
+							}}},
+							"lines": bson.M{"$push": "$$ROOT"},
+							"total": bson.M{"$sum": 1},
+						},
+					},
+					/* Sorting the groupped output */
+					{"$sort": bson.M{"_id": pgParams.SortAsc}},
 				},
-				"total": []bson.M{{"$count": "count"}},
+				"total": []bson.M{{"$count": "count"}}, // In the facet, outside limit scope to count every db lines
 			},
 		},
-		{
-			"$group": bson.M{
-				"_id": bson.M{"date": bson.M{"$dateTrunc": bson.M{
-					"date": "$date",
-					"unit": "day",
-				}}},
-				"records": bson.M{"$push": "$$ROOT"},
-				"total":   bson.M{"$sum": 1},
-			},
-		},
+
+		// {"$skip": pgParams.PerPage * (pgParams.Page - 1)},
+		// {"$limit": pgParams.PerPage},
+		// {"$sort": bson.M{"date": pgParams.SortAsc}},
 		// {
-		// 	bson.M{"$facet": bson.M{
-		// 		"data":  facetData,
-		// 		"total": []bson.M{{"$count": "count"}},
+		// 	"$group": bson.M{
+		// 		"_id": bson.M{"date": bson.M{"$dateTrunc": bson.M{
+		// 			"date": "$date",
+		// 			"unit": "day",
+		// 		}}},
+		// 		"lines": bson.M{"$push": "$$ROOT"},
+		// 		"total": bson.M{"$sum": 1},
+		// 	},
+		// },
+		// { // capturing groupped data through facet and working on it
+		// 	"$facet": bson.M{
+		// 		"data": []bson.M{
+		// 			{"$sort": bson.M{"date": pgParams.SortAsc}},
+		// 		},
+		// 		"total": []bson.M{{"$count": "count"}}, // In the facet, outside limit scope to count every db lines
 		// 	},
 		// },
 	})
+
+	// test := bson.M{
+	// 	"$group": bson.M{
+	// 		"_id": bson.M{"date": bson.M{"$dateTrunc": bson.M{
+	// 			"date": "$date",
+	// 			"unit": "day",
+	// 		}}},
+	// 		"lines": bson.M{"$push": "$$ROOT"},
+	// 		"total": bson.M{"$sum": 1},
+	// 	},
+	// }
+
+	// data, err := bson.Marshal(test)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// decoder, err := bson.NewDecoder(bsonrw.NewBSONDocumentReader(data))
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// var res interface{}
+	// err = decoder.Decode(&res)
+	// if err != nil {
+	// 	panic(err)
+	// }
+
+	// str := fmt.Sprintf("%+v\n", res)
+	// fmt.Printf("%s\n", str)
+
+	// // isGroup := strings.Contains(str, "$group")
+
+	// // rest, err := bson.MarshalExtJSON(test, true, true)
+	// // if err != nil {
+	// // 	return &results, err
+	// // }
+
+	// fmt.Printf("Test: %s\n", test)
+
+	// cursor, err := collection.Aggregate(context.Background(), []bson.M{
+	// 	{"$sort": bson.M{"_id": 1}},
+	// 	{"$skip": pgParams.PerPage * (pgParams.Page - 1)},
+	// 	{"$limit": pgParams.PerPage},
+	// 	{
+	// 		"$group": bson.M{
+	// 			"_id": bson.M{"date": bson.M{"$dateTrunc": bson.M{
+	// 				"date": "$date",
+	// 				"unit": "day",
+	// 			}}},
+	// 			"lines": bson.M{"$push": "$$ROOT"},
+	// 			"total": bson.M{"$sum": 1},
+	// 		},
+	// 	},
+	// 	// {
+	// 	// 	"$facet": bson.M{
+	// 	// 		"data": []bson.M{
+	// 	// 			{"$sort": bson.M{"_id": 1}},
+	// 	// 			{"$skip": pgParams.PerPage * (pgParams.Page - 1)},
+	// 	// 			{"$limit": pgParams.PerPage},
+	// 	// 		},
+	// 	// 		"total": []bson.M{{"$count": "count"}},
+	// 	// 	},
+	// 	// },
+	// 	// {
+	// 	// 	bson.M{"$facet": bson.M{
+	// 	// 		"data":  facetData,
+	// 	// 		"total": []bson.M{{"$count": "count"}},
+	// 	// 	},
+	// 	// },
+	// })
 
 	if err != nil {
 		return &results, err
@@ -208,19 +335,15 @@ func GetRecordsGroupByDateDebug(pgParams apimodels.PaginationQuery) (*apimodels.
 
 func GetRecordsGroupByLocation(pgParams apimodels.PaginationQuery) (*apimodels.PaginatedResults[apimodels.GroupbyRecord], error) {
 	var results apimodels.PaginatedResults[apimodels.GroupbyRecord]
-
-	if pgParams.SortBy == "" || pgParams.SortBy == "date" {
-		pgParams.SortBy = "_id"
+	if pgParams.SortBy == "" {
+		pgParams.SortBy = "location"
 	}
 	preparedQuery := getBasePreparedQuery(pgParams)
 
+	/* Adding a second sort, to get in group-by results ordered by date */
+	(*preparedQuery).Sort("date", -1)
+
 	aggPaginatedData, err := (*preparedQuery).Aggregate(
-		bson.M{
-			"$sort": bson.M{pgParams.SortBy: pgParams.SortAsc},
-		},
-		bson.M{
-			"$limit": pgParams.PerPage,
-		},
 		bson.M{
 			"$group": bson.M{"_id": "$location", "records": bson.M{"$push": "$$ROOT"}},
 		},
@@ -244,10 +367,16 @@ func GetRecordsGroupByLocation(pgParams apimodels.PaginationQuery) (*apimodels.P
 
 func getBasePreparedQuery(pgParams apimodels.PaginationQuery) *mongopagination.PagingQuery {
 	collection := connector.GetCollection("records")
-
 	preparedQuery := mongopagination.New(collection).Context(context.Background())
+
 	if pgParams.SortBy != "" {
 		preparedQuery = preparedQuery.Sort(pgParams.SortBy, pgParams.SortAsc)
+	}
+
+	if pgParams.SortAscGroup != 0 {
+		preparedQuery = preparedQuery.SortGroup(pgParams.SortAscGroup)
+	} else {
+		preparedQuery = preparedQuery.SortGroup(-1)
 	}
 
 	if pgParams.Page != 0 {
