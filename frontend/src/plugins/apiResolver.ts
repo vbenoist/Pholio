@@ -3,8 +3,11 @@ import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
 import type { PaginatedResult, PaginatedResults } from '@/models/api/paginated'
 import type { RecentlyContent } from '@/stores/recentlyContent'
 import type { ApiAddRecord } from '@/models/api/record'
+import { PaginationQuery } from '@/models/api/paginated'
 import type { UploadableFile } from '@/models/uploadableFile'
 import type { GroupbyRecord } from '@/models/api/groupby-record'
+
+export type ApiResolverCallable = (pageParams: Partial<PaginationQuery> | null) => Promise<PaginatedResults<GroupbyRecord> | null>
 
 export class ApiResolver {
   readonly axios: AxiosInstance
@@ -13,9 +16,11 @@ export class ApiResolver {
     this.axios = axiosInst
   }
 
-  fetchRecently = async (): Promise<PaginatedResult<RecentlyContent> | null> => {
+  fetchRecently = async (pageParams: Partial<PaginationQuery> | null): Promise<PaginatedResult<RecentlyContent> | null> => {
+    const params = new PaginationQuery(pageParams)
+
     return this.axios
-      .get('/content/records/recently')
+      .get('/content/records/recently', { params })
       .then((res: AxiosResponse) => {
         return res.data
       })
@@ -25,9 +30,11 @@ export class ApiResolver {
       })
   }
 
-  fetchPerDate = async (): Promise<PaginatedResults<GroupbyRecord> | null> => {
+  fetchPerDate = async (pageParams: Partial<PaginationQuery> | null): Promise<PaginatedResults<GroupbyRecord> | null> => {
+    const params = new PaginationQuery(pageParams)
+
     return this.axios
-      .get('/content/records/per-date')
+      .get('/content/records/per-date', { params })
       .then((res: AxiosResponse) => {
         return res.data
       })
@@ -37,9 +44,11 @@ export class ApiResolver {
       })
   }
 
-  fetchPerLocation = async (): Promise<PaginatedResults<GroupbyRecord> | null> => {
+  fetchPerLocation = async (pageParams: Partial<PaginationQuery> | null): Promise<PaginatedResults<GroupbyRecord> | null> => {
+    const params = new PaginationQuery(pageParams)
+
     return this.axios
-      .get('/content/records/per-location')
+      .get('/content/records/per-location', { params })
       .then((res: AxiosResponse) => {
         return res.data
       })

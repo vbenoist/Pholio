@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasFetched && items" class="container">
+  <div v-if="fetched && items.length > 0" class="container" :ref="containerRefName">
     <TileGroup
       v-for="(group, idx) in items"
       :key="`tilegroup-${idx}`"
@@ -7,17 +7,20 @@
       :items="group.results"
     />
   </div>
-  <div v-else-if="hasFetched">Aucune photo n'est disponible.</div>
+  <div v-else-if="fetched">Aucune photo n'est disponible.</div>
   <div v-else>Loading...</div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import TileGroup from '@/components/Content/TileGroup.vue'
 import { usePerLocationStore } from '@/stores/perLocationContent'
+import scrollHook from '@/composables/scrollHook'
 
 const perLocationContentStore = usePerLocationStore()
-const hasFetched = perLocationContentStore.hasFetched()
+const { fetched } = storeToRefs(perLocationContentStore)
+const { containerRefName, registerHook } = scrollHook()
 
 const resolveContent = async () => {
   await perLocationContentStore.fetchContent()
@@ -26,6 +29,10 @@ const resolveContent = async () => {
 const items = computed(() => perLocationContentStore.getContent())
 
 resolveContent()
+
+registerHook(() => {
+  perLocationContentStore.fetchNextContent()
+})
 </script>
 
 <style lang="scss" scoped>
