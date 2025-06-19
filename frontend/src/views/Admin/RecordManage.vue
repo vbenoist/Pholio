@@ -26,20 +26,31 @@ const { containerRefName, registerHook } = scrollHook()
 
 const apiDetailedRecord = computed(() => detailedApiContentStore.getContent())
 const records = ref<Array<DetailedRecord>>([])
+const workingRecords = ref<Array<string>>([])
 
 const resolveContent = async () => {
   await detailedApiContentStore.fetchContent()
 }
 
 const onRecordsResolve = async () => {
-  const prs = apiDetailedRecord.value
-    .filter(rc => records.value.findIndex(dr => dr.id === rc.id) === -1)
-    .map(rc => completeDetailedRecord(cloneDeep(rc)))
+  const prs: Promise<void>[] = []
+
+  apiDetailedRecord.value.forEach (adrc => {
+    const rcIdx = records.value.findIndex((rc) => rc.id === adrc.id)
+    const wkIdx = workingRecords.value.findIndex((id) => id === adrc.id)
+
+    if(rcIdx === -1 && wkIdx === -1) {
+      workingRecords.value.push(adrc.id)
+      prs.push(completeDetailedRecord(cloneDeep(adrc)))
+    }
+  })
 
   await Promise.all(prs)
 }
 
 const completeDetailedRecord = async(record: ApiDetailedRecord): Promise<void> => {
+  workingRecords.value.push(record.id)
+
   /* Resolving record thumb */
   console.log("resolving: ", record.id)
   const imgThumb = await apiResolver.getLinkedThumb(record.id)
