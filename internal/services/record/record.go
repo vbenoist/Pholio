@@ -28,6 +28,142 @@ func GetRecords(pgParams apimodels.PaginationQuery) (*apimodels.PaginatedResults
 	return &results, nil
 }
 
+func GetRecordsStars(pgParams apimodels.PaginationQuery) (*apimodels.PaginatedResults[databasemodels.DetailedRecord], error) {
+	var results apimodels.PaginatedResults[databasemodels.DetailedRecord]
+	preparedQuery := getBasePreparedQuery(pgParams)
+
+	aggPaginatedData, err := (*preparedQuery).Aggregate(
+		bson.M{
+			"$lookup": bson.M{
+				"from":         "pin",
+				"as":           "record_pin",
+				"localField":   "_id",
+				"foreignField": "record_id",
+				"pipeline": []bson.M{
+					{
+						"$project": bson.M{
+							"pin_id": "$_id",
+						},
+					},
+					{
+						"$project": bson.M{
+							"_id":       0,
+							"record_id": 0,
+						},
+					},
+				},
+			},
+		},
+	)
+	if err != nil {
+		return &results, err
+	}
+
+	if len(aggPaginatedData.Data) == 0 {
+		return &results, nil
+	}
+
+	results.Pagination = aggPaginatedData.Pagination
+	extracted := struct {
+		Record  *databasemodels.Record
+		Details *databasemodels.DetailedRecord
+	}{}
+
+	for _, bsonRaw := range aggPaginatedData.Data {
+		if marshallErr := bson.Unmarshal(bsonRaw, &extracted.Record); marshallErr != nil {
+			continue
+		}
+		if marshallErr := bson.Unmarshal(bsonRaw, &extracted.Details); marshallErr != nil {
+			continue
+		}
+
+		results.Documents = append(results.Documents, databasemodels.DetailedRecord{
+			Record: *(extracted.Record),
+			Pin:    *&(extracted.Details).Pin,
+		})
+	}
+
+	// collection := connector.GetCollection("records")
+	// cursor, err := collection.Aggregate(context.Background(), []bson.M{
+	// 	{
+	// 		"$lookup": bson.M{
+	// 			"from":         "pin",
+	// 			"as":           "record_pin",
+	// 			"localField":   "_id",
+	// 			"foreignField": "record_id",
+	// 			"pipeline": []bson.M{
+	// 				// {
+	// 				// 	"$replaceRoot": bson.M{
+	// 				// 		"newRoot": bson.M{
+	// 				// 			"pin": bson.M{"$cond": bson.M{
+	// 				// 				"if":   bson.M{"$eq": []interface{}{"", "$record_id"}},
+	// 				// 				"then": "0",
+	// 				// 				"else": "1",
+	// 				// 			}},
+	// 				// 		},
+	// 				// 	},
+	// 				// },
+	// 				{
+	// 					"$project": bson.M{
+	// 						"pin_id": "$_id",
+	// 					},
+	// 				},
+	// 				{
+	// 					"$project": bson.M{
+	// 						"_id":       0,
+	// 						"record_id": 0,
+	// 					},
+	// 				},
+	// 			},
+	// 		},
+	// 	},
+	// 	// {
+	// 	// 	"$replaceRoot": bson.M{
+	// 	// 		"newRoot": bson.M{
+	// 	// 			"$mergeObjects": []interface{}{
+	// 	// 				// bson.M{
+	// 	// 				// 	"$arrayElemAt": []interface{}{"$isPin", 0},
+	// 	// 				// },
+	// 	// 				bson.M{
+	// 	// 					// "pin": bson.M{
+	// 	// 					// 	"$cond": bson.M{
+	// 	// 					// 		"if":   bson.M{"$eq": []interface{}{"1", "$isPin.pin"}},
+	// 	// 					// 		"then": "1",
+	// 	// 					// 		"else": "0",
+	// 	// 					// 	},
+	// 	// 					// },
+	// 	// 					"pin": bson.M{
+	// 	// 						"$ifNull": []string{"$isPin.pin", "0"},
+	// 	// 					},
+	// 	// 				},
+	// 	// 				"$$ROOT",
+	// 	// 			},
+	// 	// 		},
+	// 	// 	},
+	// 	// },
+	// 	// {
+	// 	// 	"$project": bson.M{
+	// 	// 		// "pin": "$record_id",
+	// 	// 		"isPin": 0,
+	// 	// 		// "$$ROOT": 1,
+	// 	// 		// "pin": bson.M{"$cond": []bson.M{
+	// 	// 		// 	{"if": bson.M{"$eq": []interface{}{"", "$record_id"}}},
+	// 	// 		// 	{"then": "0"},
+	// 	// 		// 	{"else": "1"},
+	// 	// 		// }},
+	// 	// 		// "pin": bson.M{"$ifNull": []bson.M{
+	// 	// 		// 	{"if": bson.M{"$eq": []interface{}{"", "$record_id"}}},
+	// 	// 		// 	{"then": "0"},
+	// 	// 		// 	{"else": "1"},
+	// 	// 		// }},
+	// 	// 		// "isPin": 0,
+	// 	// 	},
+	// 	// },
+	// })
+
+	return &results, nil
+}
+
 func GetRecentlyRecords(pgParams apimodels.PaginationQuery) (*apimodels.PaginatedResult[apimodels.RecentlyRecords], error) {
 	var results apimodels.PaginatedResult[apimodels.RecentlyRecords]
 

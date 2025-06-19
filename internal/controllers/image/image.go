@@ -62,8 +62,7 @@ func GetThumbImage(c *gin.Context) {
 		c.JSON(400, gin.H{"error::file": "No thumb found for this record"})
 		return
 	}
-
-	http.ServeFile(c.Writer, c.Request, fullPath)
+	c.File(fullPath)
 }
 
 func GetMidImage(c *gin.Context) {

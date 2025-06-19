@@ -15,7 +15,7 @@ func SetupRouter(config cfg.ServerConfig) *gin.Engine {
 
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = []string{config.Front.Url}
-	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "OPTIONS"}
+	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"}
 	corsConfig.AllowCredentials = true
 	router.Use(cors.New(corsConfig))
 
