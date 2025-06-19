@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { defineModel, ref, toRaw, watch } from 'vue'
 import { UploadableFile } from '@/models/uploadableFile'
-import { DraftRecord } from '@/models/record'
+import { DraftRecord, type DetailedRecord } from '@/models/record'
 import PhotoCard from '@/components/Admin/ImageForm/PhotoCard.vue'
 import ImagePreview from '@/components/Admin/ImagePicker/ImagePreview.vue'
 
@@ -29,10 +29,11 @@ const retreiveDraftRecord = (photo: UploadableFile): DraftRecord => {
   return records.value.find((df) => df.file.id === photo.id) ?? new DraftRecord(photo)
 }
 
-const onDraftRecordUpdate = (draftRecord: DraftRecord) => {
-  const toUpdate = records.value.findIndex((df) => df.draftId === draftRecord.draftId)
+const onDraftRecordUpdate = (draftRecord: DraftRecord | DetailedRecord) => {
+  const dfRecord = draftRecord as DraftRecord
+  const toUpdate = records.value.findIndex((df) => df.draftId === dfRecord.draftId)
   if (toUpdate === -1) return
-  records.value[toUpdate] = draftRecord
+  records.value[toUpdate] = dfRecord
 }
 
 const updateRecords = () => {

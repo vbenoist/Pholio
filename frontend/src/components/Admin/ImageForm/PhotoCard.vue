@@ -2,12 +2,12 @@
   <div v-if="draftRecord" class="photo-card">
     <form class="photo-card__form" @submit.prevent="handleSubmit">
       <div class="photo-card__form__section photo-card__form__section__date">
-        <label :for="`draftrecord-date-${draftRecord.draftId}`" @click="triggerCalendar()">
+        <label :for="`draftrecord-date-${getRecordId(draftRecord)}`" @click="triggerCalendar()">
           Date: {{ humanFormattedDate(draftRecord.date) }}
           <v-icon name="bi-calendar-date-fill" scale="1.3" />
         </label>
         <input
-          :id="`draftrecord-date-${draftRecord.draftId}`"
+          :id="`draftrecord-date-${getRecordId(draftRecord)}`"
           class="photo-card__form__section__date__input"
           ref="draftrecord-date"
           type="date"
@@ -17,9 +17,9 @@
         />
       </div>
       <div class="photo-card__form__section photo-card__form__section__location">
-        <label :for="`draftrecord-location-${draftRecord.draftId}`">Lieu:</label>
+        <label :for="`draftrecord-location-${getRecordId(draftRecord)}`">Lieu:</label>
         <input
-          :id="`draftrecord-location-${draftRecord.draftId}`"
+          :id="`draftrecord-location-${getRecordId(draftRecord)}`"
           class="photo-card__form__section__location__input"
           type="text"
           required
@@ -27,9 +27,9 @@
         />
       </div>
       <div class="photo-card__form__section__description">
-        <label :for="`draftrecord-description-${draftRecord.draftId}`">Description:</label>
+        <label :for="`draftrecord-description-${getRecordId(draftRecord)}`">Description:</label>
         <textarea
-          :id="`draftrecord-description-${draftRecord.draftId}`"
+          :id="`draftrecord-description-${getRecordId(draftRecord)}`"
           class="photo-card__form__section__description__input"
           type="text"
           v-model="draftRecord.description"
@@ -54,9 +54,13 @@ import { useVuelidate } from '@vuelidate/core'
 import { maxLength, minLength, required } from '@vuelidate/validators'
 import type { ApiResolver } from '@/plugins/apiResolver'
 import type { DraftRecord } from '@/models/record'
-import { draftRecordToApiRecord } from '@/transformers/record'
+import type { DetailedRecord } from '@/models/record'
+import {
+  detailedRecordToApiDetailedRecord,
+  draftRecordToApiRecord
+} from '@/transformers/record'
 
-const draftRecord = defineModel<DraftRecord>({ default: null })
+const draftRecord = defineModel<DraftRecord | DetailedRecord>({ default: null })
 const calendarInputRef = useTemplateRef<HTMLInputElement>(`draftrecord-date`)
 const apiResolver = inject('$apiResolver') as ApiResolver
 
@@ -64,6 +68,14 @@ const formRules = {
   description: { maxLengthValue: maxLength(100) },
   location: { required, minLengthValue: minLength(4), maxLengthValue: maxLength(50) },
   date: { required },
+}
+
+const getRecordId = (record: DraftRecord | DetailedRecord): string => {
+  if('draftId' in record) {
+    return record.draftId
+  } else {
+    return record.id
+  }
 }
 
 const humanFormattedDate = (date: Date): string => {
@@ -89,30 +101,69 @@ const inputDate = computed<string>({
 })
 
 const handleSubmit = async () => {
-  draftRecord.value.file.status = 'SENDING'
+  if('draftId' in draftRecord.value) {
+    await _submitNewDraft()
+  } else {
+    await _submitDraft()
+  }
+}
 
-  const apiFormattedRecord = draftRecordToApiRecord(draftRecord.value)
+const _submitDraft = async() => {
+  const lcDraftRecord = draftRecord.value as DetailedRecord
+  const apiFormattedRecord = detailedRecordToApiDetailedRecord(lcDraftRecord)
 
-  /* If first attempt or previous attempted has failed on sending record data */
   if (draftRecord.value.status === 'PENDING' || draftRecord.value.status === 'FAILED') {
+    draftRecord.value.status = 'SENDING'
+    const resId = await apiResolver.updateRecord(apiFormattedRecord)
+
+    if (!resId) {
+      lcDraftRecord.status = 'FAILED'
+      return
+    } else {
+      lcDraftRecord.status = 'SENT'
+    }
+  }
+}
+
+const _submitNewDraft = async () => {
+  const lcDraftRecord = draftRecord.value as DraftRecord
+  const apiFormattedRecord = draftRecordToApiRecord(lcDraftRecord)
+
+  /* If draft has already been saved once, juste updating */
+  if(lcDraftRecord.saved) {
+    draftRecord.value.status = 'SENDING'
+    const success = await apiResolver.updateDraftRecord(apiFormattedRecord)
+
+    if(!success) {
+      lcDraftRecord.status = 'FAILED'
+    } else {
+      lcDraftRecord.status = 'SENT'
+    }
+    return
+  }
+  /* By default, adding a new record */
+  else {
+    draftRecord.value.file.status = 'PENDING'
+    draftRecord.value.file.status = 'SENDING'
     const resId = await apiResolver.addRecord(apiFormattedRecord)
 
     if (!resId) {
-      draftRecord.value.status = 'FAILED'
+      lcDraftRecord.status = 'FAILED'
       return
     } else {
-      draftRecord.value.draftId = resId
-      draftRecord.value.status = 'SENT'
+      lcDraftRecord.draftId = resId
+      lcDraftRecord.status = 'SENT'
+      lcDraftRecord.saved = true
     }
-  }
 
-  /* Linking photo to freshly saved record */
-  await saveLinkedImage()
+    /* Linking photo to freshly saved record */
+    await _saveLinkedImage()
+  }
 }
 
-const saveLinkedImage = (): Promise<void> => {
+const _saveLinkedImage = (): Promise<void> => {
   return apiResolver
-    .linkImageRecord(draftRecord.value.draftId, draftRecord.value.file)
+    .linkImageRecord((draftRecord.value as DraftRecord).draftId, draftRecord.value.file)
     .then((success) => {
       draftRecord.value.file.status = success ? 'SENT' : 'FAILED'
     })
@@ -128,10 +179,20 @@ const triggerCalendar = () => {
 
 const submitIcon = computed<string>(() => {
   if (v$.value.$error) return 'md-error-outlined'
-  if (draftRecord.value.status === 'FAILED') return 'bi-cloud-slash-fill'
-  if (draftRecord.value.file.status === 'SENDING') return 'md-pending'
-  if (draftRecord.value.file.status === 'FAILED') return 'bi-cloud-slash-fill'
-  if (draftRecord.value.file.status === 'SENT') return 'bi-cloud-check-fill'
+
+  if (draftRecord.value.status === 'SENDING'
+    || draftRecord.value.file.status === 'SENDING'
+  ) return 'md-pending'
+
+  if (draftRecord.value.status === 'FAILED'
+    || draftRecord.value.file.status === 'FAILED'
+  ) return 'bi-cloud-slash-fill'
+
+  /* In case of new record, that's the photo supply which will determine if the process has been completed */
+  if('draftId' in draftRecord.value) {
+    if (draftRecord.value.file.status === 'SENT') return 'bi-cloud-check-fill'
+  } else if (draftRecord.value.status === 'SENT') return 'bi-cloud-check-fill'
+
   return 'bi-cloud-arrow-up-fill'
 })
 

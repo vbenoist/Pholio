@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 export type RoutesNames = 'RECENT' | 'DATE' | 'LOCATION' | 'PINED'
+export type RoutesAdminNames = 'ADMIN-LOGIN' | 'ADMIN-ADD' | 'ADMIN-MANAGE' | 'ADMIN-SETUP'
 
 export const routes = [
   {
@@ -36,6 +37,10 @@ export const routes = [
     },
   },
   {
+    path: '/admin',
+    redirect: '/admin/add'
+  },
+  {
     path: '/admin/login',
     name: 'ADMIN-LOGIN',
     component: () => import('@/views/Admin/LogIn.vue'),
@@ -47,6 +52,23 @@ export const routes = [
     path: '/admin/add',
     name: 'ADMIN-ADD',
     component: () => import('@/views/Admin/AddImages.vue'),
+    meta: {
+      layout: 'admin',
+      auth: true,
+    },
+  },
+  {
+    path: '/admin/manage',
+    name: 'ADMIN-MANAGE',
+    component: () => import('@/views/Admin/RecordManage.vue'),
+    meta: {
+      layout: 'admin',
+      auth: true,
+    },
+  },  {
+    path: '/admin/setup',
+    name: 'ADMIN-SETUP',
+    component: () => import('@/views/Admin/RecordManage.vue'),
     meta: {
       layout: 'admin',
       auth: true,

@@ -18,7 +18,8 @@
       <slot name="preview-extend" :photo="photo"></slot>
     </div>
 
-    <ImageModal v-model:is-open="isModalOpen" v-model:photo="selectedPhoto" @close="onCloseModal" />
+    <ImageModal v-model:is-open="isPreviewModalOpen" v-model:photo="selectedPhoto" @close="onCloseModal" />
+    <AckDeleteModal v-model:is-open="isDeleteModalOpen" @delete="onAckRemovePhoto" @close="onCloseModal" />
   </div>
 </template>
 
@@ -26,28 +27,52 @@
 import { defineModel, defineProps, ref } from 'vue'
 import type { UploadableFile } from '@/models/uploadableFile'
 import ImageModal from '@/components/Admin/ImagePicker/ImageModal.vue'
+import AckDeleteModal from '@/components/Admin/ImagePicker/AckDeleteModal.vue'
 
 type OrientationType = 'horizontal' | 'vertical'
+
+const emit = defineEmits(['deletePhoto'])
 
 const { orientation = 'horizontal' } = defineProps<{
   orientation?: OrientationType
 }>()
+
 const photos = defineModel<Array<UploadableFile>>()
-const isModalOpen = ref<boolean>(false)
+const preventDelete = defineModel<boolean>('prevent-delete', { default: false })
+const customDelete = defineModel<boolean>( 'custom-delete', { default: false })
+
+const isPreviewModalOpen = ref<boolean>(false)
+const isDeleteModalOpen = ref<boolean>(false)
 const selectedPhoto = ref<UploadableFile | null>(null)
 
 const displayFullsize = (photo: UploadableFile) => {
-  console.log('displayFullsize', photo)
-  isModalOpen.value = true
+  isPreviewModalOpen.value = true
   selectedPhoto.value = photo
 }
 
-const removePhoto = (photo: UploadableFile) => {
-  console.log('removePhoto', photo)
-  const idx = photos.value?.findIndex((p) => p.id === photo.id) ?? -1
+const removePhoto = (photo: UploadableFile, ackDelete: boolean = false) => {
+  if (preventDelete.value && !ackDelete) {
+    isDeleteModalOpen.value = true
+    selectedPhoto.value = photo
+    console.log('prevent delete')
+    return
+  }
 
+  if (customDelete.value) {
+    console.log('custom delete')
+    emit('deletePhoto', photo)
+    return
+  }
+
+  const idx = photos.value?.findIndex((p) => p.id === photo.id) ?? -1
   if (idx === -1) return
   photos.value?.splice(idx, 1)
+}
+
+const onAckRemovePhoto = () => {
+  if(!selectedPhoto.value) return
+  removePhoto(selectedPhoto.value, true)
+  isDeleteModalOpen.value = false
 }
 
 const onCloseModal = () => {

@@ -4,9 +4,15 @@
       <h1 class="header__title">PHOLIO</h1>
       <nav class="header__nav">
         <ul class="header__nav__content">
-          <li>Publications</li>
-          <li>Médiathèque</li>
-          <li>Configuration</li>
+          <li
+            :class="{ active: routeName === 'ADMIN-MANAGE' }"
+            @click="goToRoute('ADMIN-MANAGE')"
+          >Publications</li>
+          <li
+            :class="{ active: routeName === 'ADMIN-ADD' }"
+            @click="goToRoute('ADMIN-ADD')"
+          >Médiathèque</li>
+          <li :class="{ active: routeName === 'ADMIN-SETUP' }">Configuration</li>
         </ul>
       </nav>
     </header>
@@ -16,6 +22,24 @@
     </div>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import type { RoutesAdminNames } from '@/router'
+
+const router = useRouter()
+const route = useRoute()
+
+const goToRoute = (routeName: RoutesAdminNames) => {
+  router.push({ name: routeName })
+}
+
+const routeName = computed((): string => {
+  return route.name ?? ""
+})
+
+</script>
 
 <style lang="scss" scoped>
 .header {
@@ -65,6 +89,22 @@
             transform: scaleX(1);
           }
         }
+
+        .active {
+          color: red;
+          &::after {
+            transform-origin: bottom center;
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 1px;
+            top: 0;
+            left: 0;
+            background-color: white;
+            transition: transform 0.25s ease-out;
+          }
+        }
       }
     }
   }
@@ -78,4 +118,9 @@
     color: #ffffff;
   }
 }
+
+.active {
+  color: white;
+}
+
 </style>
