@@ -5,9 +5,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/jackidu14/pholio/internal/helpers/cfg"
-	"github.com/jackidu14/pholio/pkg/helpers/image"
 	"github.com/pkg/errors"
+	"github.com/vbenoist/pholio/internal/helpers/cfg"
+	"github.com/vbenoist/pholio/pkg/helpers/image"
 )
 
 func GetFileFullpath(recordId string, fileType image.ResizeImageType) (string, error) {

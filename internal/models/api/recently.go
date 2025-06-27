@@ -1,7 +1,7 @@
 package apimodels
 
 import (
-	databasemodels "github.com/jackidu14/pholio/internal/models/database"
+	databasemodels "github.com/vbenoist/pholio/internal/models/database"
 )
 
 // Difference between Lastly / Lately is just from configured date

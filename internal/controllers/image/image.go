@@ -6,11 +6,11 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackidu14/pholio/internal/helpers/cfg"
-	"github.com/jackidu14/pholio/internal/helpers/file"
-	imageIntlHelper "github.com/jackidu14/pholio/internal/helpers/image"
-	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
-	imageGlobHelper "github.com/jackidu14/pholio/pkg/helpers/image"
+	"github.com/vbenoist/pholio/internal/helpers/cfg"
+	"github.com/vbenoist/pholio/internal/helpers/file"
+	imageIntlHelper "github.com/vbenoist/pholio/internal/helpers/image"
+	imagetracking "github.com/vbenoist/pholio/internal/services/image-tracking"
+	imageGlobHelper "github.com/vbenoist/pholio/pkg/helpers/image"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

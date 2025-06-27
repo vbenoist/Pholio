@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jackidu14/pholio/internal/helpers/cfg"
+	"github.com/vbenoist/pholio/internal/helpers/cfg"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )

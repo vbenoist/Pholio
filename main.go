@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/jackidu14/pholio/internal/database/connector"
-	"github.com/jackidu14/pholio/internal/helpers/auth"
-	"github.com/jackidu14/pholio/internal/helpers/cfg"
-	routerserver "github.com/jackidu14/pholio/internal/server"
+	"github.com/vbenoist/pholio/internal/database/connector"
+	"github.com/vbenoist/pholio/internal/helpers/auth"
+	"github.com/vbenoist/pholio/internal/helpers/cfg"
+	routerserver "github.com/vbenoist/pholio/internal/server"
 )
 
 func main() {

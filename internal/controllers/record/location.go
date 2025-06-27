@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackidu14/pholio/internal/helpers/controller"
-	"github.com/jackidu14/pholio/internal/services/record"
+	"github.com/vbenoist/pholio/internal/helpers/controller"
+	"github.com/vbenoist/pholio/internal/services/record"
 )
 
 func GetRecordsPerLocation(c *gin.Context) {

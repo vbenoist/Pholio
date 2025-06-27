@@ -3,10 +3,10 @@ package image
 import (
 	"log"
 
-	databasemodels "github.com/jackidu14/pholio/internal/models/database"
-	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
-	"github.com/jackidu14/pholio/pkg/helpers/image"
 	"github.com/nfnt/resize"
+	databasemodels "github.com/vbenoist/pholio/internal/models/database"
+	imagetracking "github.com/vbenoist/pholio/internal/services/image-tracking"
+	"github.com/vbenoist/pholio/pkg/helpers/image"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

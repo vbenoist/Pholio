@@ -1,10 +1,10 @@
 package record
 
 import (
-	"github.com/jackidu14/pholio/internal/helpers/file"
-	apimodels "github.com/jackidu14/pholio/internal/models/api"
-	databasemodels "github.com/jackidu14/pholio/internal/models/database"
-	imagehelper "github.com/jackidu14/pholio/pkg/helpers/image"
+	"github.com/vbenoist/pholio/internal/helpers/file"
+	apimodels "github.com/vbenoist/pholio/internal/models/api"
+	databasemodels "github.com/vbenoist/pholio/internal/models/database"
+	imagehelper "github.com/vbenoist/pholio/pkg/helpers/image"
 )
 
 func GetDetailedRecords(pgParams apimodels.PaginationQuery) (apimodels.PaginatedResults[apimodels.DetailedRecord], error) {

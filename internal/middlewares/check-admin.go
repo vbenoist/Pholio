@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/jackidu14/pholio/internal/services/auth"
+	"github.com/vbenoist/pholio/internal/services/auth"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 

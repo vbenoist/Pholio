@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	apimodels "github.com/jackidu14/pholio/internal/models/api"
+	apimodels "github.com/vbenoist/pholio/internal/models/api"
 )
 
 func GetPaginationParameters(c *gin.Context) apimodels.PaginationQuery {

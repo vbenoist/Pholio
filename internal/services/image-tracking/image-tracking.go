@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/jackidu14/pholio/internal/database/connector"
-	databasemodels "github.com/jackidu14/pholio/internal/models/database"
+	"github.com/vbenoist/pholio/internal/database/connector"
+	databasemodels "github.com/vbenoist/pholio/internal/models/database"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

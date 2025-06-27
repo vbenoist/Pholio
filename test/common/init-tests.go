@@ -1,7 +1,7 @@
 package common_test
 
 import (
-	"github.com/jackidu14/pholio/internal/database/connector"
+	"github.com/vbenoist/pholio/internal/database/connector"
 )
 
 func Init() {

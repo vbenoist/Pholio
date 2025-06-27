@@ -1,6 +1,6 @@
 package apimodels
 
-import databasemodels "github.com/jackidu14/pholio/internal/models/database"
+import databasemodels "github.com/vbenoist/pholio/internal/models/database"
 
 type GroupbyRecord struct {
 	GroupBy string                  `json:"group-by"`

@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/jackidu14/pholio/internal/database/connector"
-	"github.com/jackidu14/pholio/internal/helpers/cfg"
-	"github.com/jackidu14/pholio/internal/helpers/image"
-	models "github.com/jackidu14/pholio/internal/models/database"
-	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
 	"github.com/stretchr/testify/assert"
+	"github.com/vbenoist/pholio/internal/database/connector"
+	"github.com/vbenoist/pholio/internal/helpers/cfg"
+	"github.com/vbenoist/pholio/internal/helpers/image"
+	models "github.com/vbenoist/pholio/internal/models/database"
+	imagetracking "github.com/vbenoist/pholio/internal/services/image-tracking"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

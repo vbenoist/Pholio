@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jackidu14/pholio/internal/database/connector"
-	apimodels "github.com/jackidu14/pholio/internal/models/api"
-	imagetracking "github.com/jackidu14/pholio/internal/services/image-tracking"
+	"github.com/vbenoist/pholio/internal/database/connector"
+	apimodels "github.com/vbenoist/pholio/internal/models/api"
+	imagetracking "github.com/vbenoist/pholio/internal/services/image-tracking"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

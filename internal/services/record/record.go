@@ -6,10 +6,10 @@ import (
 	"log"
 	"time"
 
-	"github.com/jackidu14/pholio/internal/database/connector"
-	apimodels "github.com/jackidu14/pholio/internal/models/api"
-	databasemodels "github.com/jackidu14/pholio/internal/models/database"
-	mongopagination "github.com/jackidu14/pholio/pkg/helpers/database"
+	"github.com/vbenoist/pholio/internal/database/connector"
+	apimodels "github.com/vbenoist/pholio/internal/models/api"
+	databasemodels "github.com/vbenoist/pholio/internal/models/database"
+	mongopagination "github.com/vbenoist/pholio/pkg/helpers/database"
 	"go.mongodb.org/mongo-driver/bson"
 )
 

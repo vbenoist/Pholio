@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"github.com/jackidu14/pholio/internal/helpers/cfg"
-	"github.com/jackidu14/pholio/internal/services/auth"
+	"github.com/vbenoist/pholio/internal/helpers/cfg"
+	"github.com/vbenoist/pholio/internal/services/auth"
 )
 
 func InitServerDatabase() {

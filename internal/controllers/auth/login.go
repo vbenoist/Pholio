@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"github.com/jackidu14/pholio/internal/helpers/cfg"
-	apimodels "github.com/jackidu14/pholio/internal/models/api"
-	"github.com/jackidu14/pholio/internal/services/auth"
+	"github.com/vbenoist/pholio/internal/helpers/cfg"
+	apimodels "github.com/vbenoist/pholio/internal/models/api"
+	"github.com/vbenoist/pholio/internal/services/auth"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )

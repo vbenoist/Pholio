@@ -2,7 +2,7 @@ package record
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jackidu14/pholio/internal/middlewares"
+	"github.com/vbenoist/pholio/internal/middlewares"
 )
 
 func RegisterRoutes(router *gin.Engine) {
