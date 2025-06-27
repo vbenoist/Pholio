@@ -3,9 +3,11 @@ package record
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/vbenoist/pholio/internal/database/connector"
+	"github.com/vbenoist/pholio/internal/helpers/file"
 	apimodels "github.com/vbenoist/pholio/internal/models/api"
 	imagetracking "github.com/vbenoist/pholio/internal/services/image-tracking"
 	"go.mongodb.org/mongo-driver/bson"
@@ -102,7 +104,8 @@ func EditRecord(c *gin.Context) {
 
 func RemoveRecord(c *gin.Context) {
 	collection := connector.GetCollection("records")
-	id, _ := primitive.ObjectIDFromHex(c.Param("id"))
+	recordPId := c.Param("id")
+	id, _ := primitive.ObjectIDFromHex(recordPId)
 	filter := bson.D{primitive.E{Key: "_id", Value: id}}
 
 	res, err := collection.DeleteOne(c, filter)
@@ -114,6 +117,14 @@ func RemoveRecord(c *gin.Context) {
 
 	if res.DeletedCount == 0 {
 		c.JSON(http.StatusNotFound, gin.H{"error::database": "Error while retreiving record to delete from database"})
+		return
+	}
+
+	recordFolder := file.GetRecordWorkingFolder(recordPId)
+	err = os.RemoveAll(recordFolder)
+	if err != nil {
+		fmt.Printf("%s\n", err)
+		c.JSON(500, gin.H{"error::filesystem": "Error while deleting record folder"})
 		return
 	}
 

@@ -10,9 +10,13 @@ import (
 	"github.com/vbenoist/pholio/pkg/helpers/image"
 )
 
-func GetFileFullpath(recordId string, fileType image.ResizeImageType) (string, error) {
+func GetRecordWorkingFolder(recordId string) string {
 	config := cfg.GetServerConfig()
-	folderPath := fmt.Sprintf("%s/%s/", config.FileManager.UploadPath, recordId)
+	return fmt.Sprintf("%s/%s/", config.FileManager.UploadPath, recordId)
+}
+
+func GetFileFullpath(recordId string, fileType image.ResizeImageType) (string, error) {
+	folderPath := GetRecordWorkingFolder(recordId)
 
 	folder, err := os.ReadDir(folderPath)
 	if err != nil {
