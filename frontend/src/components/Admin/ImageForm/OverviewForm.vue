@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { defineModel, ref, toRaw, watch } from 'vue'
-import { UploadableFile } from '@/models/uploadableFile'
+import { type UploadableFile } from '@/models/uploadableFile'
 import { DraftRecord, type DetailedRecord } from '@/models/record'
 import PhotoCard from '@/components/Admin/ImageForm/PhotoCard.vue'
 import ImagePreview from '@/components/Admin/ImagePicker/ImagePreview.vue'
@@ -38,6 +38,10 @@ const onDraftRecordUpdate = (draftRecord: DraftRecord | DetailedRecord) => {
 
 const updateRecords = () => {
   records.value = toRaw(photos.value).map((p) => new DraftRecord(p))
+
+  records.value.forEach((rc) => {
+    rc.extractExifDate()
+  })
 }
 
 updateRecords()

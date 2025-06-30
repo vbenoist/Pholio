@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
-import type { UploadableFile } from './uploadableFile'
+import { extractImageExifDate, type UploadableFile } from './uploadableFile'
 import type { DetailedRecord as ApiDetailedRecord } from './api/detailed-record'
 
 export type DraftRecordStatus = 'PENDING' | 'SENDING' | 'FAILED' | 'SENT'
@@ -21,6 +21,11 @@ export class DraftRecord {
     this.file = file
     this.status = 'PENDING'
     this.saved = false
+  }
+
+  public extractExifDate = async() => {
+    const date = await extractImageExifDate(this.file)
+    this.date = date
   }
 }
 

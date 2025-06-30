@@ -32,10 +32,21 @@
       "pre-commit": "lint-staged"
     }
   },
+  "exifreader": {
+    "include": {
+      "jpeg": true,
+      "png": true,
+      "exif": [
+        "DateTimeOriginal",
+        "OffsetTimeOriginal"
+      ]
+    }
+  },
   "dependencies": {
     "@vuelidate/core": "^2.0.3",
     "@vuelidate/validators": "^2.0.4",
     "axios": "^1.8.1",
+    "exifreader": "^4.31.1",
     "lodash": "^4.17.21",
     "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.2.6",
