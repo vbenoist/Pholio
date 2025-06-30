@@ -248,7 +248,7 @@ func GetRecordsGroupByDate(pgParams apimodels.PaginationQuery) (*apimodels.Pagin
 			return "", err
 		}
 
-		return ext.Format("2006-02-01"), nil
+		return ext.Format("2006-01-02"), nil
 	})
 	if err != nil {
 		return &results, err

@@ -3,7 +3,7 @@
     <TileGroup
       v-for="(group, idx) in items"
       :key="`tilegroup-${idx}`"
-      :title="group['group-by']"
+      :title="formatGroupDate(group['group-by'])"
       :items="group.results"
     />
   </div>
@@ -24,6 +24,18 @@ const { containerRefName, registerHook } = scrollHook()
 
 const resolveContent = async () => {
   await perDateContentStore.fetchContent()
+}
+
+const formatGroupDate = (date: string): string => {
+  const d = new Date(date)
+  const formatted =  d.toLocaleString("fr-FR", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+
+  return `Le ${formatted}`
 }
 
 const items = computed(() => perDateContentStore.getContent())

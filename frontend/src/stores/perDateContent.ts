@@ -4,6 +4,7 @@ import { defineStore } from 'pinia'
 import type { GroupbyRecord } from '@/models/api/groupby-record'
 import { ApiResolver } from '@/plugins/apiResolver'
 import PaginatedStore from '@/composables/store/pagination'
+import { mergeGroupByResults } from '@/helpers/store/merge'
 
 export const usePerDateStore = defineStore('perDateContent', () => {
   const apiResolver = inject('$apiResolver') as ApiResolver
@@ -15,7 +16,7 @@ export const usePerDateStore = defineStore('perDateContent', () => {
     fetchNextContent,
     getContent,
     initContent
-  } = PaginatedStore(apiResolver.fetchPerDate, content)
+  } = PaginatedStore(apiResolver.fetchPerDate, mergeGroupByResults, content)
 
   return {
     fetched,

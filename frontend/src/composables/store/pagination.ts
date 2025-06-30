@@ -2,9 +2,15 @@ import type { Ref } from 'vue'
 import { ref } from 'vue'
 import type { ApiResolverCallable } from '@/plugins/apiResolver'
 import type { PaginatedResults } from '@/models/api/paginated'
-import { PaginationQuery } from '@/models/api/paginated'
+import {
+  PaginationQuery,
+  type GroupbyRecord,
+  type DetailedRecord
+} from '@/models/api/'
 
-export default <T>(apiResolverClbk: ApiResolverCallable, content: Ref<T[]>) => {
+export type StoreMergeMethod = <T>(a: Ref<T[]>, b: GroupbyRecord[] | DetailedRecord[]) => void
+
+export default <T>(apiResolverClbk: ApiResolverCallable, mergeMethod: StoreMergeMethod, content: Ref<T[]>) => {
   const fetched: Ref<boolean> = ref(false)
   const reachedEnd: Ref<boolean> = ref(false)
   const pagination: Ref<PaginationQuery> = ref(new PaginationQuery({ perPage: 3 }))
@@ -41,7 +47,7 @@ export default <T>(apiResolverClbk: ApiResolverCallable, content: Ref<T[]>) => {
       return
     }
 
-    content.value = content.value.concat(res.documents)
+    mergeMethod(content, res.documents)
     pagination.value.page++
   }
 

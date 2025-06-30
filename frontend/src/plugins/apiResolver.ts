@@ -8,7 +8,9 @@ import type { UploadableFile } from '@/models/uploadableFile'
 import type { GroupbyRecord } from '@/models/api/groupby-record'
 import type { DetailedRecord } from '@/models/api/detailed-record'
 
-export type ApiResolverCallable = (pageParams: Partial<PaginationQuery> | null) => Promise<PaginatedResults<GroupbyRecord | DetailedRecord> | null>
+export type ApiResolverCallable =
+  (pageParams: Partial<PaginationQuery> | null)
+  => Promise<PaginatedResults<GroupbyRecord> | PaginatedResults<DetailedRecord> | null>
 
 export class ApiResolver {
   readonly axios: AxiosInstance
