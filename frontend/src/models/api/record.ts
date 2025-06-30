@@ -1,7 +1,7 @@
 type ApiRecord = {
   description: string | null
   location: string
-  date: Date
+  date: string
 }
 
 export type ApiAddRecord = ApiRecord & {

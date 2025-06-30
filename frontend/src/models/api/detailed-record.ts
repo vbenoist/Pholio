@@ -2,7 +2,7 @@ export type DetailedRecord = {
   id: string
   description: string | null
   location: string
-  date: Date
+  date: string
   folder: string
   stared: boolean
 }

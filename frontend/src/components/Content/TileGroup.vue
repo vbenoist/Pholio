@@ -6,15 +6,26 @@
         <hr class="container__content__title__separator" />
       </div>
       <div class="container__content__list">
-        <img
+        <div
           v-for="(itm, key) in props.items"
           :key="`img-last-add-${key}`"
           class="container__content__list__item"
-          :src="apiPathBuilder.buildRecordThumbUrl(itm)"
-          :alt="itm.description ?? itm.location"
-          loading="lazy"
-        />
-        ette
+        >
+          <img
+            class="container__content__list__item--img"
+            :src="apiPathBuilder.buildRecordThumbUrl(itm)"
+            :alt="itm.description ?? itm.location"
+            loading="lazy"
+          />
+          <div
+            :class="{
+              'container__content__list__item--txt--normal': !props.overlayCaption,
+              'container__content__list__item--txt--overlay': props.overlayCaption
+            }"
+          >
+            <slot name="item-extend" :item="itm"></slot>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -30,6 +41,7 @@ const apiPathBuilder = inject('$apiPathBuilder') as ApiPathBuilder
 const props = defineProps({
   title: String,
   items: Array<ApiGetRecord>,
+  overlayCaption: { type: Boolean, default: false },
 })
 </script>
 
@@ -54,8 +66,27 @@ const props = defineProps({
       justify-content: flex-start;
 
       &__item {
-        max-width: 286px;
-        margin: 0px 40px 20px 0px;
+        display: flex;
+        flex-flow: column wrap;
+
+        &--img {
+          max-width: 286px;
+          margin-right: 40px;
+        }
+
+        &--txt {
+          font-size: 0.9em;
+
+          &--normal {
+            margin-bottom: 10px;
+          }
+          &--overlay {
+            width: fit-content;
+            padding: 2px 4px;
+            margin: -20px 0 10px 0px;
+            backdrop-filter: blur(8px);
+          }
+        }
       }
     }
   }

@@ -1,6 +1,9 @@
 import { v4 as uuidv4 } from 'uuid'
 import { extractImageExifDate, type UploadableFile } from './uploadableFile'
-import type { DetailedRecord as ApiDetailedRecord } from './api/detailed-record'
+import type {
+  ApiGetRecord,
+  DetailedRecord as ApiDetailedRecord
+} from './api'
 
 export type DraftRecordStatus = 'PENDING' | 'SENDING' | 'FAILED' | 'SENT'
 
@@ -29,7 +32,17 @@ export class DraftRecord {
   }
 }
 
-export type DetailedRecord = ApiDetailedRecord & {
-  file: UploadableFile
+export type Record = Omit<ApiGetRecord, "date"> & {
+  date: Date
+}
+
+export type GroupbyRecord = {
+  'group-by': string,
+  'results': Record[]
+}
+
+export type DetailedRecord = Omit<ApiDetailedRecord, "date"> & {
+  date: Date,
+  file: UploadableFile | null
   status: DraftRecordStatus
 }

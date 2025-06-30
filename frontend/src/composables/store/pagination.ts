@@ -3,10 +3,10 @@ import { ref } from 'vue'
 import type { ApiResolverCallable } from '@/plugins/apiResolver'
 import type { PaginatedResults } from '@/models/api/paginated'
 import {
-  PaginationQuery,
   type GroupbyRecord,
   type DetailedRecord
-} from '@/models/api/'
+} from '@/models/record'
+import { PaginationQuery } from '@/models/api/paginated'
 
 export type StoreMergeMethod = <T>(a: Ref<T[]>, b: GroupbyRecord[] | DetailedRecord[]) => void
 
@@ -42,7 +42,7 @@ export default <T>(apiResolverClbk: ApiResolverCallable, mergeMethod: StoreMerge
     }
 
     const res = await apiResolverClbk(pagination.value)
-    if(!res || !res.documents) {
+    if(!res || !res.documents || res.documents.length === 0) {
       reachedEnd.value = true
       return
     }

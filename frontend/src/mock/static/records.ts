@@ -46,7 +46,7 @@ export const mockRecords = (length: number): Array<ApiGetRecord> => {
       id: uuid,
       description: fakeDescriptions[rndDescription],
       location: fakeLocations[rndLocation],
-      date: new Date(fakeDates[rndDates]),
+      date: new Date(fakeDates[rndDates]).toISOString(),
     })
   }
 
