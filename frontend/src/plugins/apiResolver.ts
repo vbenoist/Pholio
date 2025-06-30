@@ -1,12 +1,26 @@
 import type { App } from 'vue'
 import type { AxiosError, AxiosInstance, AxiosResponse } from 'axios'
-import type { PaginatedResult, PaginatedResults } from '@/models/api/paginated'
-import type { RecentlyContent } from '@/stores/recentlyContent'
-import type { ApiAddRecord } from '@/models/api/record'
-import { PaginationQuery } from '@/models/api/paginated'
+import type {
+  ApiAddRecord,
+  DetailedRecord as ApiDetailedRecord,
+  GroupbyRecord as ApiGroupbyRecord,
+  PaginatedResult,
+  PaginatedResults,
+  RecentlyRecord as ApiRecentlyRecord
+} from '@/models/api/'
 import type { UploadableFile } from '@/models/uploadableFile'
-import type { GroupbyRecord } from '@/models/api/groupby-record'
-import type { DetailedRecord } from '@/models/api/detailed-record'
+import type {
+  RecentlyRecord,
+  DetailedRecord,
+  GroupbyRecord
+} from '@/models/record'
+
+import { PaginationQuery } from '@/models/api/paginated'
+import {
+  apiDetailedRecordToDetailedRecord,
+  apiGroupedRecordToGroupedRecord,
+  apiRecordToRecord
+} from '@/transformers/record'
 
 export type ApiResolverCallable =
   (pageParams: Partial<PaginationQuery> | null)
@@ -19,13 +33,22 @@ export class ApiResolver {
     this.axios = axiosInst
   }
 
-  fetchRecently = async (pageParams: Partial<PaginationQuery> | null): Promise<PaginatedResult<RecentlyContent> | null> => {
+  fetchRecently = async (pageParams: Partial<PaginationQuery> | null): Promise<PaginatedResult<RecentlyRecord> | null> => {
     const params = new PaginationQuery(pageParams)
 
     return this.axios
       .get('/content/records/recently', { params })
       .then((res: AxiosResponse) => {
-        return res.data
+        return res.data as PaginatedResult<ApiRecentlyRecord>
+      })
+      .then((res: PaginatedResult<ApiRecentlyRecord>) => {
+        return {
+          pagination: res.pagination,
+          document: {
+            lately: apiRecordToRecord(res.document.lately),
+            lastly: apiRecordToRecord(res.document.lastly)
+          }
+        }
       })
       .catch((e: AxiosError) => {
         console.log(e)
@@ -39,7 +62,13 @@ export class ApiResolver {
     return this.axios
       .get('/content/records/detailed', { params })
       .then((res: AxiosResponse) => {
-        return res.data
+        return res.data as PaginatedResults<ApiDetailedRecord>
+      })
+      .then((res: PaginatedResults<ApiDetailedRecord>) => {
+        return {
+          pagination: res.pagination,
+          documents: apiDetailedRecordToDetailedRecord(res.documents)
+        }
       })
       .catch((e: AxiosError) => {
         console.log(e)
@@ -53,7 +82,13 @@ export class ApiResolver {
     return this.axios
       .get('/content/records/per-date', { params })
       .then((res: AxiosResponse) => {
-        return res.data
+        return res.data as PaginatedResults<ApiGroupbyRecord>
+      })
+      .then((res: PaginatedResults<ApiGroupbyRecord>) => {
+        return {
+          pagination: res.pagination,
+          documents: apiGroupedRecordToGroupedRecord(res.documents)
+        }
       })
       .catch((e: AxiosError) => {
         console.log(e)
@@ -67,7 +102,13 @@ export class ApiResolver {
     return this.axios
       .get('/content/records/per-location', { params })
       .then((res: AxiosResponse) => {
-        return res.data
+        return res.data as PaginatedResults<ApiGroupbyRecord>
+      })
+      .then((res: PaginatedResults<ApiGroupbyRecord>) => {
+        return {
+          pagination: res.pagination,
+          documents: apiGroupedRecordToGroupedRecord(res.documents)
+        }
       })
       .catch((e: AxiosError) => {
         console.log(e)

@@ -1,5 +1,6 @@
 export * from './detailed-record'
 export * from './groupby-record'
 export * from './paginated'
+export * from './recently-record'
 export * from './record'
 export * from './user'

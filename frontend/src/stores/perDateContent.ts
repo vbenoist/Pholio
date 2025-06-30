@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 import { inject, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { GroupbyRecord } from '@/models/api/groupby-record'
+import type { GroupbyRecord } from '@/models/record'
 import { ApiResolver } from '@/plugins/apiResolver'
 import PaginatedStore from '@/composables/store/pagination'
 import { mergeGroupByResults } from '@/helpers/store/merge'

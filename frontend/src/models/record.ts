@@ -46,3 +46,8 @@ export type DetailedRecord = Omit<ApiDetailedRecord, "date"> & {
   file: UploadableFile | null
   status: DraftRecordStatus
 }
+
+export type RecentlyRecord = {
+  lastly: Array<Record>
+  lately: Array<Record>
+}

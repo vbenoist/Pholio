@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 import { inject, ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { DetailedRecord } from '@/models/api/detailed-record'
+import type { DetailedRecord } from '@/models/record'
 import { ApiResolver } from '@/plugins/apiResolver'
 import PaginatedStore from '@/composables/store/pagination'
 import { mergeDetailedResults } from '@/helpers/store/merge'
