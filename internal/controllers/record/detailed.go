@@ -22,7 +22,6 @@ func GetDetailedRecords(c *gin.Context) {
 			return
 		}
 
-		// if err == os.ErrNotExist || err == os.ErrInvalid || os.IsNotExist(err) {
 		if os.IsNotExist(err) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error::query": "An orphan record has been found: %s"})
 			return
@@ -32,5 +31,6 @@ func GetDetailedRecords(c *gin.Context) {
 		return
 	}
 
+	results.AvoidNullResults()
 	c.JSON(http.StatusAccepted, results)
 }
